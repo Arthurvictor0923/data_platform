@@ -40,25 +40,36 @@ python publish/build_site.py --out _site
 
 ## 发布到 GitHub Pages
 
-仓库采用**双通道**发布，任选其一即可：
+仓库当前已配置为 **GitHub Actions 自动发布**（Pages Source = GitHub Actions），
+**推送 `main` 即自动上线**，无需任何手工操作。
 
-### 通道 A · GitHub Actions（推荐，推送即自动发布）
+推送后约 1–2 分钟完成组装与部署，可在此查看运行记录：
+<https://github.com/Arthurvictor0923/data_platform/actions>
 
-1. 仓库 → **Settings** → **Pages**
-2. **Build and deployment** → Source 选 **GitHub Actions** → Save
-3. 之后每次 `git push origin main`，工作流会自动组装站点并发布
+### 工作流程做了什么
 
-### 通道 B · gh-pages 分支
+`.github/workflows/pages.yml` 每次触发时依次执行：
 
-1. 仓库 → **Settings** → **Pages**
-2. **Build and deployment** → Source 选 **Deploy from a branch**
-3. Branch 选 **gh-pages**，目录选 **/ (root)** → Save
-4. 该分支已预置组装好的站点内容；本地改动后用下面命令刷新：
+1. 检出代码 → 2. 运行 `publish/build_site.py` 组装站点 → 3. 配置 Pages →
+4. 上传站点产物 → 5. 发布到 GitHub Pages → 6. 同步 `gh-pages` 备用分支
+
+第 6 步会持续把 `gh-pages` 分支更新为与线上一致的站点快照，
+万一日后关闭 Actions，可在 Settings → Pages 把 Source 切回「Deploy from a branch → gh-pages / (root)」继续托管。
+
+### 日常更新
 
 ```bash
-python publish/build_site.py --out _site
-# 将 _site 内容同步到 gh-pages 分支后推送
+# 改完原型后
+git add -A && git commit -m "说明" && git push origin main
+# 等 1–2 分钟后刷新 https://arthurvictor0923.github.io/data_platform/ 即可看到新版本
 ```
+
+### 站点结构
+
+| 线上路径 | 内容 |
+| --- | --- |
+| `/` | 目录配置 · 资产复制交互原型（首页） |
+| `/screenshots/` | 平台 13 张业务截图画廊 |
 
 ## 常用命令
 

@@ -41,6 +41,30 @@ TEXT = "#222b36"
 MUTED = "#7a8699"
 BLUE = "#1877f2"
 
+# 内联 SVG 图标（目录 / 图层意象），免去额外的图标文件请求
+FAVICON = (
+    '<link rel="icon" href="data:image/svg+xml,'
+    "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E"
+    "%3Crect width='32' height='32' rx='7' fill='%231877f2'/%3E"
+    "%3Cg fill='none' stroke='white' stroke-width='2' "
+    "stroke-linecap='round' stroke-linejoin='round'%3E"
+    "%3Cpath d='M16 7.5l8.5 4.3-8.5 4.3-8.5-4.3L16 7.5z'/%3E"
+    "%3Cpath d='M8 16.4l8 4.1 8-4.1'/%3E"
+    "%3Cpath d='M8 20.6l8 4.1 8-4.1'/%3E"
+    "%3C/g%3E%3C/svg%3E\">"
+)
+
+
+def inject_favicon(html_text: str) -> str:
+    """在 <head> 后注入站点图标，不改动原型源码本身。"""
+    if 'rel="icon"' in html_text:
+        return html_text
+    idx = html_text.lower().find("<head>")
+    if idx == -1:
+        return html_text
+    at = idx + len("<head>")
+    return html_text[:at] + "\n" + FAVICON + html_text[at:]
+
 
 def build_gallery(titles: list[tuple[str, str]]) -> str:
     """生成业务截图画廊页。titles 为 (文件名, 展示标题) 列表。"""
@@ -61,6 +85,7 @@ def build_gallery(titles: list[tuple[str, str]]) -> str:
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="烛龙大数据平台业务截图集。">
+{FAVICON}
 <title>业务截图 · 烛龙大数据平台</title>
 <style>
 :root{{--blue:{BLUE};--bg:{PAGE_BG};--card:{CARD_BG};--line:{LINE};--text:{TEXT};--muted:{MUTED}}}
@@ -117,7 +142,8 @@ def main() -> int:
         print(f"[错误] 找不到原型源文件：{PROTOTYPE_SRC}", file=sys.stderr)
         return 1
     out_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(PROTOTYPE_SRC, out_dir / "index.html")
+    prototype_html = inject_favicon(PROTOTYPE_SRC.read_text(encoding="utf-8"))
+    (out_dir / "index.html").write_text(prototype_html, encoding="utf-8")
     print(f"[完成] 原型首页  -> {out_dir / 'index.html'}")
 
     # ---- 2. 业务截图 ----
