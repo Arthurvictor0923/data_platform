@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+烛龙大数据平台 · GitHub Pages 站点组装脚本
+
+把仓库里的业务原型与业务截图组装成可直接托管的静态站点：
+
+    _site/
+      index.html              原型首页（目录配置 · 资产复制交互原型）
+      screenshots/
+        index.html            业务截图画廊
+        *.png                 业务截图原图
+
+用法：
+    python publish/build_site.py              # 输出到仓库根目录 _site/
+    python publish/build_site.py --out dist   # 输出到指定目录
+
+本脚本只依赖 Python 标准库，可在本地与 GitHub Actions 中直接复用。
+"""
+
+from __future__ import annotations
+
+import argparse
+import html
+import shutil
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+# 原型源文件 -> 站点首页
+PROTOTYPE_SRC = REPO_ROOT / "配置管理目录功能优化" / "目录配置-资产复制交互原型.html"
+# 业务截图目录
+SCREENSHOT_SRC = REPO_ROOT / "平台业务截图"
+
+# 画廊页配色，与原型主色（#1877f2）保持一致
+PAGE_BG = "#f2f6fb"
+CARD_BG = "#ffffff"
+LINE = "#e3e9f2"
+TEXT = "#222b36"
+MUTED = "#7a8699"
+BLUE = "#1877f2"
+
+
+def build_gallery(titles: list[tuple[str, str]]) -> str:
+    """生成业务截图画廊页。titles 为 (文件名, 展示标题) 列表。"""
+    cards = []
+    for filename, title in titles:
+        safe = html.escape(filename)
+        cards.append(
+            f"""    <figure class="card">
+      <a href="{safe}" target="_blank" rel="noopener">
+        <img src="{safe}" alt="{html.escape(title)}" loading="lazy">
+      </a>
+      <figcaption>{html.escape(title)}</figcaption>
+    </figure>"""
+        )
+
+    return f"""<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="烛龙大数据平台业务截图集。">
+<title>业务截图 · 烛龙大数据平台</title>
+<style>
+:root{{--blue:{BLUE};--bg:{PAGE_BG};--card:{CARD_BG};--line:{LINE};--text:{TEXT};--muted:{MUTED}}}
+*{{box-sizing:border-box}}
+body{{margin:0;background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;font-size:14px}}
+a{{color:var(--blue);text-decoration:none}}
+a:hover{{text-decoration:underline}}
+.wrap{{max-width:1280px;margin:0 auto;padding:34px 26px 60px}}
+.head{{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px}}
+h1{{font-size:22px;margin:0 0 8px;letter-spacing:.5px}}
+.sub{{color:var(--muted);margin:0;line-height:1.7}}
+.back{{font-size:13px;white-space:nowrap}}
+.grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}}
+.card{{margin:0;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(20,41,67,.05);transition:box-shadow .18s ease,transform .18s ease}}
+.card:hover{{box-shadow:0 8px 22px rgba(20,41,67,.12);transform:translateY(-2px)}}
+.card img{{display:block;width:100%;height:196px;object-fit:cover;object-position:top center;background:#eef2f7}}
+figcaption{{padding:11px 14px;font-size:13px;color:var(--text);border-top:1px solid var(--line)}}
+footer{{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <h1>烛龙大数据平台 · 业务截图</h1>
+      <p class="sub">数据汇聚 / 数据开发 / 数据应用 / 数据资源 / 资产管理 / 系统管理 共 {len(titles)} 张业务界面截图，点击可查看原图。</p>
+    </div>
+    <a class="back" href="../index.html">← 返回交互原型</a>
+  </div>
+  <div class="grid">
+{chr(10).join(cards)}
+  </div>
+  <footer>烛龙大数据平台 · 目录配置功能优化原型</footer>
+</div>
+</body>
+</html>
+"""
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="组装 GitHub Pages 静态站点")
+    parser.add_argument(
+        "--out",
+        default=str(REPO_ROOT / "_site"),
+        help="站点输出目录，默认 _site/",
+    )
+    args = parser.parse_args()
+
+    out_dir = Path(args.out).resolve()
+    shots_dir = out_dir / "screenshots"
+
+    # ---- 1. 原型首页 ----
+    if not PROTOTYPE_SRC.is_file():
+        print(f"[错误] 找不到原型源文件：{PROTOTYPE_SRC}", file=sys.stderr)
+        return 1
+    out_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(PROTOTYPE_SRC, out_dir / "index.html")
+    print(f"[完成] 原型首页  -> {out_dir / 'index.html'}")
+
+    # ---- 2. 业务截图 ----
+    if not SCREENSHOT_SRC.is_dir():
+        print(f"[警告] 业务截图目录不存在，跳过：{SCREENSHOT_SRC}")
+        return 0
+
+    shots_dir.mkdir(parents=True, exist_ok=True)
+    titles: list[tuple[str, str]] = []
+    for src in sorted(SCREENSHOT_SRC.iterdir()):
+        if not src.is_file() or src.suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
+            continue
+        shutil.copy2(src, shots_dir / src.name)
+        titles.append((src.name, src.stem.replace("_", " ")))
+
+    if titles:
+        (shots_dir / "index.html").write_text(build_gallery(titles), encoding="utf-8")
+        print(f"[完成] 业务截图  -> {shots_dir}（{len(titles)} 张）")
+
+    print(f"\n站点已组装完毕：{out_dir}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

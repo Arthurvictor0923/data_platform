@@ -1,0 +1,21 @@
+# ---- 操作系统 ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- WorkBuddy 本地数据 ----
+.workbuddy/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ---- 编辑器 ----
+.idea/
+.vscode/
+*.swp
+
+# ---- 站点组装产物（由 publish/build_site.py 生成） ----
+_site/
