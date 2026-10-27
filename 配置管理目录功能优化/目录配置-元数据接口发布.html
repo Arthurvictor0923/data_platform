@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="目录资产配置、复制资产与目录元数据接口发布的可交互 HTML 原型，包含树形目录选择、访问白名单、元数据卡片预览和模拟调用。">
+<title>目录元数据接口发布 · 烛龙大数据平台</title>
+<style>
+:root{--blue:#1877f2;--blue-light:#e7f4ff;--text:#222b36;--muted:#89939e;--line:#edf0f4;--bg:#edf5fc;--green:#67ad43;--red:#ed6468}
+*{box-sizing:border-box}body{margin:0;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;color:var(--text);background:linear-gradient(120deg,#e0effb 0%,#eff6fd 58%,#e7f1fb 100%);font-size:14px}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed}button,input,select,textarea{outline:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #73b1ff;outline-offset:2px}button{border:0;background:transparent;color:inherit}a{color:var(--blue)}svg{width:18px;height:18px;vertical-align:middle;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.icon-btn{display:inline-flex;justify-content:center;align-items:center;width:32px;height:32px;border-radius:5px;color:#6f7c89}.icon-btn:hover{background:#f1f6fb}.btn{height:37px;border:1px solid #d9dee5;background:white;border-radius:5px;padding:0 17px;display:inline-flex;gap:7px;align-items:center;justify-content:center;white-space:nowrap;box-shadow:0 2px 3px #14294305}.btn:hover{border-color:#79b1f9;color:var(--blue)}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 2px 5px #1877f222}.btn.primary:hover{background:#348afa}.btn:disabled{color:#b1b8c0;background:#f5f6f8;border-color:#e2e5e9;box-shadow:none}.btn.copy{border-color:#98c4fc;color:var(--blue)}.btn svg{width:16px;height:16px}.header{height:76px;display:flex;align-items:center;padding:0 26px 0 22px;gap:35px}.brand{display:flex;align-items:center;gap:10px;white-space:nowrap;font-size:23px;font-weight:700;color:#151c24;letter-spacing:.5px}.brandmark{width:35px;height:35px;fill:none;stroke:none}.app-grid{color:#909da9;margin-left:0}.top-nav{display:flex;align-self:stretch;gap:30px;align-items:center;white-space:nowrap}.top-nav span{font-size:15px;position:relative;line-height:76px}.top-nav .active{color:var(--blue);font-weight:600}.top-nav .active:after{content:"";position:absolute;bottom:16px;height:3px;border-radius:3px;background:var(--blue);left:0;right:0}.header-right{margin-left:auto;display:flex;align-items:center;gap:16px}.prototype-label{font-size:12px;color:#5f7891;border:1px solid #b9cee2;padding:3px 8px;border-radius:4px;white-space:nowrap}.avatar{background:#75a7dd;color:#fff;width:31px;height:31px;border-radius:50%;display:grid;place-items:center;font-size:12px}.user{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:13px}.frame{display:flex;gap:0;height:calc(100vh - 76px);min-height:610px}.side{width:220px;flex:0 0 220px;padding:19px 17px;position:relative;overflow:hidden}.side:after{content:"";position:absolute;width:380px;height:400px;z-index:-1;bottom:-130px;left:-180px;background:linear-gradient(145deg,transparent 30%,#b5cde15c 30%,#d3e1ef99 47%,transparent 47%),linear-gradient(35deg,#e2ecf744 10%,#abc7db44 38%,transparent 38%);transform:rotate(-8deg)}.side-item{height:52px;display:flex;gap:11px;align-items:center;padding:0 16px;color:#283746;white-space:nowrap}.side-item .chev{margin-left:auto;width:13px}.side-item.sub{padding-left:49px}.side-item.active{background:#c2ddf9;color:var(--blue);font-weight:600;border-radius:6px}.main{background:white;border-radius:11px 0 0 0;margin-right:10px;flex:1;min-width:0;display:flex;flex-direction:column;margin-bottom:18px;overflow:hidden}.page-head{height:72px;display:flex;align-items:center;gap:19px;padding:0 20px;flex-shrink:0}.back{border:1px solid #dce1e7;border-radius:50%;width:37px;height:37px;display:grid;place-items:center}.page-title{padding-left:19px;border-left:1px solid #e5e9ed;font-size:16px;line-height:25px}.workspace{display:flex;flex:1;min-height:0;padding:0 20px 0 19px}.directory-pane{width:290px;flex:0 0 290px;border-right:1px solid var(--line);padding-right:18px;display:flex;flex-direction:column}.tree-toolbar{display:flex;align-items:center;justify-content:space-between;height:49px;margin-bottom:10px}.tree-toolbar strong{font-weight:600;font-size:15px}.tree-toolbar .btn{padding:0 12px}.tree{overflow:auto;flex:1;padding-bottom:28px}.tree-row{display:flex;align-items:center;border-radius:5px;min-height:45px;margin:2px 0;padding-right:9px;gap:8px;cursor:pointer;user-select:none;white-space:nowrap}.tree-row:hover{background:#f5f9fd}.tree-row.selected{background:var(--blue-light);color:#243d56}.tree-row .arrow{color:#838b92;font-size:11px;width:14px;text-align:center}.tree-row .node-label{overflow:hidden;text-overflow:ellipsis}.tree-row .ncount{color:inherit;font-size:13px;margin-left:2px}.tree-row .new-node{color:#93a5b6;font-size:12px;margin-left:auto}.table-pane{flex:1;min-width:0;padding-left:19px;display:flex;flex-direction:column}.asset-toolbar{min-height:49px;display:flex;align-items:center;gap:12px;margin-bottom:12px}.search{display:flex;align-items:center;gap:8px;border:1px solid #d9dee5;border-radius:5px;height:37px;background:#fff;padding:0 11px;max-width:100%;color:#9aa3ad}.search input{border:0;width:100%;min-width:0;font-size:13px;color:var(--text);height:33px;background:none}.search input::placeholder{color:#b7bdc5}.asset-toolbar>.search{width:280px}.asset-toolbar .actions{display:flex;gap:12px;margin-left:auto}.table-scroll{overflow:auto;flex:1;min-height:0}table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;white-space:nowrap}th{background:#f8f9fb;color:#666e78;font-weight:400;height:39px;padding:0 15px;border-bottom:1px solid var(--line)}td{padding:0 15px;height:57px;border-bottom:1px solid var(--line)}tbody tr:hover{background:#fbfdff}.main-table{min-width:830px}.main-table th:first-child{width:25%}.main-table td:first-child{max-width:260px;overflow:hidden;text-overflow:ellipsis}.main-table th:last-child,.main-table td:last-child{position:sticky;right:0;background:#fff;box-shadow:-5px 0 8px -7px #9baec2}.main-table th:last-child{background:#f8f9fb}.ops{display:flex;align-items:center;gap:21px}.link{padding:3px 0;color:var(--blue);font-size:13px;white-space:nowrap}.link:hover{text-decoration:underline}.link.danger{color:var(--red)}.link:disabled{color:#c5c8cd;text-decoration:none}.unpublished{color:var(--red)}.published{color:#333}.pager{display:flex;align-items:center;justify-content:flex-end;gap:11px;height:69px;flex-shrink:0;font-size:13px;white-space:nowrap}.page-number{height:33px;min-width:33px;border-radius:5px}.page-number.active{border:1px solid var(--blue);color:var(--blue)}.page-number:disabled{color:#c2c8cf}.pager select{border:1px solid #d9dee5;border-radius:5px;padding:7px 10px;color:#535e69;background:white;font-size:13px}.jump{border:1px solid #d9dee5;border-radius:5px;width:40px;height:32px;text-align:center}.empty{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:13px;height:290px;color:#8c98a4;text-align:center}.empty svg{width:53px;height:53px;color:#aebed0;stroke-width:1.1}.empty p{margin:0;font-size:13px;color:#a4aeba}.empty strong{font-size:14px;font-weight:400;color:#768492}.row-added{animation:rowfade 6s forwards}@keyframes rowfade{0%,40%{background:#edf6ff}100%{background:white}}.overlay{position:fixed;inset:0;background:#172b4059;z-index:30;display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(1px)}.overlay[hidden]{display:none}.dialog{background:#fff;width:min(980px,calc(100vw - 48px));border-radius:9px;box-shadow:0 18px 60px #0c203238;display:flex;flex-direction:column;max-height:calc(100vh - 48px);overflow:hidden}.dialog-head{height:66px;display:flex;align-items:center;padding:0 25px;border-bottom:1px solid #e9edf1;flex-shrink:0}.dialog-head h2{font-size:18px;margin:0;font-weight:600;letter-spacing:.2px}.dialog-head .icon-btn{margin-left:auto}.dialog-body{padding:22px 25px 0;overflow:auto;min-height:0}.field-line{display:flex;gap:18px;align-items:center;margin-bottom:18px}.field-label{font-size:14px;width:76px;flex:0 0 76px;color:#4d5865}.target-path{background:#f5f8fc;border:1px solid #e6edf5;border-radius:5px;min-height:38px;flex:1;display:flex;align-items:center;gap:9px;padding:9px 12px;font-size:13px;color:#4b6076}.target-path svg{color:#6b91ba;width:16px;height:16px}.target-path span{white-space:normal;overflow-wrap:anywhere}.source-wrap{flex:1;position:relative;min-width:0}.source-trigger{width:100%;height:39px;border:1px solid #d6dce4;border-radius:5px;text-align:left;display:flex;gap:8px;align-items:center;padding:0 12px;background:white}.source-trigger span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:13px}.source-trigger .placeholder{color:#a9b1ba}.source-trigger svg{width:15px;height:15px;color:#9aa4af}.source-trigger.open{border-color:var(--blue);box-shadow:0 0 0 2px #1877f210}.source-popover{position:absolute;z-index:40;top:45px;left:0;right:0;background:white;border:1px solid #e2e8ef;box-shadow:0 9px 28px #284a6d26;border-radius:6px;padding:10px;max-height:315px;display:flex;flex-direction:column}.source-popover[hidden]{display:none}.source-popover .search{flex-shrink:0}.source-options{overflow:auto;min-height:0;margin-top:7px}.source-option{display:flex;width:100%;align-items:center;gap:8px;text-align:left;height:35px;border-radius:4px;font-size:13px;white-space:nowrap;padding-right:9px}.source-option:hover{background:#edf6ff}.source-option.selected{color:var(--blue);background:#edf6ff}.source-option:disabled{color:#bac1c9;background:#fafbfc}.source-option svg{width:15px;height:15px;color:#92a7bf}.source-option span:last-child{margin-left:auto;font-size:12px;color:#9aa7b4}.copy-toolbar{display:flex;align-items:center;margin-top:22px;gap:10px;margin-bottom:12px}.copy-toolbar strong{font-size:14px;font-weight:500}.copy-toolbar small{color:#929da8;font-size:12px;margin-left:3px}.copy-toolbar .search{margin-left:auto;width:258px;height:34px}.copy-toolbar .search input{height:30px;font-size:12px}.copy-tablebox{border:1px solid #e7ecf2;border-radius:5px;overflow:auto;min-height:302px;max-height:346px}.copy-table{table-layout:fixed;min-width:690px}.copy-table th{height:39px;font-size:12px}.copy-table td{height:50px;font-size:13px}.copy-table th:first-child,.copy-table td:first-child{width:45px;padding-left:17px;padding-right:9px}.copy-table .name-cell{width:32%}.copy-table .path-cell{width:27%;color:#8190a0;font-size:12px}.copy-table .state-cell{width:15%}.copy-table .api-cell{width:10%}.copy-table .exist-cell{width:10%;text-align:right}.ellip{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.copy-table tr.chosen{background:#f1f7ff}.copy-table tr.exists{color:#a8b0b9;background:#fcfcfd}.copy-table tr.exists .unpublished,.copy-table tr.exists .published,.copy-table tr.exists .path-cell{color:#a8b0b9}.existing-badge{background:#f0f2f5;color:#9aa3ae;border-radius:3px;font-size:11px;padding:3px 5px;display:inline-block}.copy-table input[type=checkbox]{appearance:none;vertical-align:middle;width:15px;height:15px;border:1px solid #ccd4dd;border-radius:3px;margin:0;cursor:pointer;background:#fff;position:relative}.copy-table input:checked{background:var(--blue);border-color:var(--blue)}.copy-table input:checked:after{content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;border:solid white;border-width:0 2px 2px 0;transform:rotate(45deg)}.copy-table input:indeterminate{background:var(--blue);border-color:var(--blue)}.copy-table input:indeterminate:after{content:"";position:absolute;background:white;width:7px;height:2px;left:3px;top:6px}.copy-table input:disabled{background:#f1f3f5;border-color:#dfe4ea;cursor:not-allowed}.copy-pager{height:54px}.dialog-foot{padding:17px 25px;display:flex;gap:10px;align-items:center;border-top:1px solid #e9edf1;flex-shrink:0;background:white}.selection{color:#737f8c;font-size:13px}.selection b{color:var(--blue);font-weight:500;margin:0 3px}.dialog-foot .spacer{flex:1}.copy-note{font-size:12px;line-height:1.7;color:#8895a3;margin:0 0 17px;display:flex;align-items:flex-start;gap:6px}.copy-note svg{width:14px;height:14px;margin-top:3px}.toast-container{position:fixed;z-index:100;left:50%;top:23px;transform:translateX(-50%);pointer-events:none}.toast{display:flex;align-items:center;gap:9px;background:white;border:1px solid #edf0f4;box-shadow:0 7px 28px #1d3b5a29;padding:12px 20px;border-radius:6px;font-size:14px;animation:toast-in .2s ease;color:#384553}.toast svg{color:#63ad48}.toast.info svg{color:var(--blue)}@keyframes toast-in{from{transform:translateY(-10px);opacity:0}to{transform:translateY(0);opacity:1}}.small-dialog{width:470px}.small-dialog .dialog-body{padding:23px 25px}.input{border:1px solid #d9dee5;border-radius:5px;padding:10px 12px;width:100%;font-size:13px}.form-field{margin-bottom:18px}.form-field label{display:block;margin-bottom:9px;color:#52606f;font-size:13px}.error{font-size:12px;color:var(--red);margin-top:7px;min-height:15px}.detail-list{display:grid;grid-template-columns:105px 1fr;gap:18px;font-size:13px;line-height:1.6}.detail-list dt{color:#8c97a2}.detail-list dd{margin:0;word-break:break-all}.spinner{width:14px;height:14px;border:2px solid #ffffff6b;border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.directory-list{padding:0 25px 25px}.directory-list[hidden]{display:none}.workspace[hidden]{display:none}.notice{font-size:13px;line-height:1.8;color:#637184}.small-dialog .dialog-foot{justify-content:flex-end}.demo-support{color:#8996a4;font-size:12px;line-height:1.8;margin:0}.no-options{padding:22px 12px;text-align:center;color:#9aa4af;font-size:13px}
+@media(min-width:1700px){.side{width:240px;flex-basis:240px}.directory-pane{width:335px;flex-basis:335px}.top-nav{gap:38px}.header{gap:42px}.main-table{font-size:14px}td{height:59px}.tree-row{min-height:48px}.brand{font-size:25px}}
+@media(max-width:1250px){.header{gap:24px;padding-left:17px;padding-right:18px}.brand{font-size:20px;gap:7px}.brandmark{width:29px}.app-grid{display:none}.top-nav{gap:19px}.top-nav span{font-size:13px}.header-right{gap:9px}.header-right>.icon-btn{display:none}.side{width:185px;flex-basis:185px;padding-left:11px;padding-right:11px}.side-item{font-size:13px;padding-left:11px}.side-item.sub{padding-left:40px}.directory-pane{width:245px;flex-basis:245px}.tree-toolbar .btn{font-size:12px;padding:0 8px}.tree-row{font-size:13px}.workspace{padding-left:16px;padding-right:16px}.table-pane{padding-left:16px}.asset-toolbar>.search{width:210px}.asset-toolbar .actions{gap:8px}.asset-toolbar .btn{padding:0 12px}.pager{gap:7px}}
+@media(max-width:900px){.header{height:65px}.top-nav{display:none}.frame{height:calc(100vh - 65px);min-height:520px}.side{width:155px;flex-basis:155px}.side-item{padding-left:5px}.side-item.sub{padding-left:30px}.directory-pane{width:210px;flex-basis:210px;padding-right:12px}.tree-toolbar{flex-wrap:wrap;height:78px;align-content:center;gap:9px}.tree-toolbar .btn{height:31px}.workspace{padding-left:12px;padding-right:12px}.asset-toolbar{flex-wrap:wrap;gap:8px;justify-content:flex-end;min-height:78px}.asset-toolbar>.search{width:100%}.asset-toolbar .actions{margin-left:0}.page-head{height:60px}.dialog{width:calc(100vw - 30px);max-height:calc(100vh - 30px)}.overlay{padding:15px}.dialog-body{padding:18px 19px 0}.dialog-head{padding:0 19px;height:59px}.dialog-foot{padding:15px 19px}.field-label{width:64px;flex-basis:64px}.field-line{gap:10px}.copy-toolbar .search{width:215px}.user span{display:none}.copy-tablebox{min-height:250px}.main{margin-right:7px}}
+@media(max-width:580px){.side{display:none}.main{margin:0 6px 6px}.directory-pane{width:155px;flex-basis:155px}.tree-row{font-size:12px}.tree-row .ncount{font-size:11px}.tree-toolbar strong{font-size:13px}.header{padding:0 13px}.brand{font-size:18px}.prototype-label{font-size:10px}.header-right{gap:5px}.user{display:none}.field-line{align-items:flex-start}.field-label{padding-top:9px}.copy-toolbar{flex-wrap:wrap}.copy-toolbar .search{width:100%;margin-left:0}.copy-pager{gap:4px}.copy-pager .page-number{min-width:26px}.copy-note{font-size:11px}.selection{font-size:12px}.dialog-foot .btn{padding:0 10px;font-size:12px}.pager .jump,.pager .jump-label{display:none}.dialog-head h2{font-size:16px}}
+
+/* Directory metadata publishing: reuse the existing platform's components. */
+[hidden]{display:none!important}
+.top-nav button{padding:0;font-size:15px;position:relative;height:76px;white-space:nowrap}.top-nav button.active{color:var(--blue);font-weight:600}.top-nav button.active:after{content:"";position:absolute;bottom:16px;height:3px;border-radius:3px;background:var(--blue);left:0;right:0}.top-nav button:hover{color:var(--blue)}
+.meta-directorybar{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);padding:0 0 16px;margin-bottom:16px;min-height:54px;flex-shrink:0}.meta-directorybar .directory-heading{min-width:0;flex:1}.directory-heading strong{font-size:16px;font-weight:600;display:block}.directory-heading small{display:block;color:#8a98a5;font-size:12px;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.meta-directorybar .btn{padding:0 13px}.meta-directorybar .link{font-size:12px}.new-feature{background:#e9f3ff;color:#2276da;font-size:10px;padding:2px 5px;border-radius:3px;vertical-align:middle;margin-left:7px;font-weight:400}
+.meta-overlay{z-index:45;background:#172b4059}.meta-detail-overlay{z-index:55;background:#172b4066}#secondaryOverlay{z-index:65}.meta-dialog{width:min(1050px,calc(100vw - 48px))}.meta-dialog .dialog-head{height:64px}.meta-dialog .dialog-body{padding:22px 28px 20px}.meta-head-sub{margin-left:13px;color:#97a3af;font-size:12px}.meta-section-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;margin:0 0 17px}.meta-section-title .number{width:22px;height:22px;border-radius:6px;display:inline-grid;place-items:center;color:var(--blue);background:#eef5ff;font-size:12px;font-weight:600}.meta-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 25px}.meta-form-field label.field-name{display:block;font-size:13px;margin-bottom:9px;color:#52606f}.required:before{content:"*";color:#ee6d73;margin-right:4px}.meta-form-field .input{height:39px;background:white}.meta-form-field .error:empty{display:none}.meta-check{display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:#576575;line-height:1.5}.meta-check input{accent-color:var(--blue);width:15px;height:15px;margin:0;cursor:pointer}.meta-subdirs{margin-top:10px}.meta-wide{grid-column:1/-1}.meta-callers{display:flex;gap:12px;flex-wrap:wrap}.meta-caller{display:flex;align-items:center;gap:9px;border:1px solid #dce3eb;border-radius:6px;padding:12px 15px;flex:1;min-width:180px;cursor:pointer;background:white}.meta-caller:has(input:checked){border-color:#79b1f9;background:#f4f9ff}.meta-caller input{accent-color:var(--blue);width:15px;height:15px;margin:0}.meta-caller span{font-size:13px}.meta-caller small{display:block;margin-top:5px;color:#9aa7b5;font-size:11px}.meta-divider{height:1px;background:var(--line);margin:24px 0 21px}.meta-scope-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.meta-scope-head .meta-section-title{margin:0}.meta-scope-head .search{width:235px;height:32px;margin-left:auto}.meta-scope-head .search input{height:28px;font-size:12px}.meta-scope-count{font-size:12px;color:#8b97a4;font-weight:400}.meta-scope-count b{color:var(--blue);font-weight:600}.meta-preview-table{border:1px solid #e5ebf2;border-radius:6px;max-height:240px;min-height:220px;overflow:auto}.meta-preview-table table{min-width:590px}.meta-preview-table th{position:sticky;top:0;z-index:1;height:35px;font-size:12px}.meta-preview-table td{height:46px;font-size:12px}.meta-preview-table .empty{height:216px}.meta-preview-table th:first-child{width:29%}.meta-preview-table th:nth-child(2){width:27%}.meta-preview-table td:first-child{max-width:270px;overflow:hidden;text-overflow:ellipsis}.meta-preview-table td:nth-child(2){color:#8694a3}.meta-mini-tag{display:inline-block;color:#607991;font-size:11px;border:1px solid #e4ebf1;border-radius:4px;padding:3px 7px;background:#f7fafc}.meta-inline-note{margin-top:11px;font-size:12px;color:#8b98a5;line-height:1.8}.meta-inline-note svg{width:14px;height:14px;margin-right:4px;color:#8fa3b7}.meta-foot-text{font-size:12px;color:#8d99a6;line-height:1.6}.meta-dialog .dialog-foot{padding:16px 28px}.meta-status{font-size:12px;display:inline-flex;gap:6px;align-items:center;color:#52a373;white-space:nowrap}.meta-status:before{content:"";width:6px;height:6px;border-radius:50%;background:#55ad7e}.meta-status.off{color:#9aa4af}.meta-status.off:before{background:#a5adb6}
+.service-view{display:flex;flex-direction:column;min-height:0;flex:1;padding:0 25px 6px}.service-tabs{display:flex;border-bottom:1px solid #e8edf2;margin-bottom:22px;height:43px;flex-shrink:0}.service-tabs span{border-bottom:2px solid var(--blue);color:var(--blue);font-weight:500;padding:0 4px 15px;font-size:14px}.service-toolbar{display:flex;align-items:center;gap:12px;margin-bottom:17px}.service-toolbar .search{width:310px}.service-toolbar select{height:37px;width:135px;border:1px solid #d9dee5;border-radius:5px;padding:0 10px;background:white;color:#657383}.service-toolbar .btn{margin-left:auto}.service-tablebox{flex:1;overflow:auto}.service-table{min-width:990px}.service-table td{height:74px;vertical-align:middle;font-size:12px}.service-table th{font-size:12px}.service-table td:first-child{min-width:195px}.service-name{font-size:13px;font-weight:500;color:#344a61}.service-id{display:block;font-family:ui-monospace,monospace;font-size:11px;color:#98a5b2;margin-top:7px}.service-dir{max-width:235px;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:#738699}.service-apps{font-size:12px;line-height:1.9}.service-table .ops{gap:14px}.service-table .ops .link{font-size:12px}.service-table .mini-count{font-size:14px;font-weight:500;color:#41556b}.service-footer{display:flex;align-items:center;justify-content:space-between;min-height:59px;color:#8d9aa7;font-size:12px;flex-shrink:0}.service-footer .link{font-size:12px}.service-empty{height:380px;gap:17px}.service-empty .btn{font-size:13px}.side-item.service-active{background:#c2ddf9;color:var(--blue);font-weight:600;border-radius:6px}.side button.side-item{width:100%;text-align:left}
+.meta-detail-dialog{width:min(1100px,calc(100vw - 48px))}.meta-detail-dialog .dialog-body{padding:20px 27px 24px}.meta-success{display:flex;gap:11px;align-items:center;background:#f0faf4;border:1px solid #d6efdf;padding:11px 15px;border-radius:6px;margin-bottom:18px;color:#468b61;font-size:13px}.meta-success svg{width:20px;height:20px}.meta-success small{color:#73a888;margin-left:auto;font-size:12px}.meta-detail-summary{display:grid;grid-template-columns:1.3fr 1fr .55fr;gap:22px;margin-bottom:18px;font-size:13px}.meta-detail-summary dt{font-size:12px;color:#99a4af;margin-bottom:9px}.meta-detail-summary dd{margin:0;line-height:1.6;color:#42576d;word-break:break-all}.meta-endpoint{display:flex;align-items:center;gap:11px;border:1px solid #dde8f3;border-radius:6px;padding:12px 14px;background:#f7faff;margin-bottom:18px;min-width:0}.meta-method{color:#358c64;background:#e6f5ec;border:1px solid #cfe7da;border-radius:4px;font:600 11px ui-monospace,monospace;padding:4px 7px}.meta-endpoint code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;color:#40617c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.meta-endpoint .demo-address{font-size:11px;color:#98a8b7;white-space:nowrap}.meta-endpoint .link{font-size:12px}.meta-tabs{display:flex;align-items:center;border-bottom:1px solid #e7edf3;margin-bottom:18px;gap:28px}.meta-tabs button{font-size:13px;padding:0 2px 12px;color:#7c8b9b;position:relative}.meta-tabs button.active{color:var(--blue);font-weight:500}.meta-tabs button.active:after{content:"";height:2px;background:var(--blue);position:absolute;bottom:-1px;left:0;right:0}.meta-tabs small{margin-left:auto;margin-bottom:12px;font-size:11px;color:#94a0ad}.meta-cards-layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:20px;min-height:340px}.meta-cards-list{border:1px solid #e4ebf2;border-radius:6px;overflow:auto;max-height:370px;padding:6px}.meta-card-item{display:block;text-align:left;width:100%;padding:11px 12px;border-radius:4px;font-size:12px;line-height:1.6;border-bottom:1px solid #f2f5f8}.meta-card-item span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.meta-card-item small{display:block;font-size:11px;color:#96a4b2;margin-top:4px}.meta-card-item.active{background:#edf5ff;color:var(--blue)}.meta-card-item:hover{background:#f3f8fe}.meta-card{border:1px solid #e0e8f1;border-radius:7px;padding:21px 23px;min-width:0}.meta-card-title{display:flex;align-items:center;gap:10px;margin-bottom:8px}.meta-card-icon{width:37px;height:37px;display:grid;place-items:center;color:var(--blue);background:#eaf4ff;border-radius:7px;flex-shrink:0}.meta-card-title h3{font-size:16px;font-weight:600;line-height:1.5;margin:0;word-break:break-all}.meta-card-title small{margin-left:auto;font-size:11px;white-space:nowrap;color:#9aabba}.meta-card-path{font-size:11px;color:#8b9cac;line-height:1.7;margin:9px 0 17px}.meta-card-description{color:#748699;font-size:12px;line-height:1.8;margin:0 0 17px}.meta-card-info{display:grid;grid-template-columns:80px 1fr 70px 1fr;gap:9px 11px;font-size:12px;margin:0 0 18px;line-height:1.5}.meta-card-info dt{color:#92a1b0}.meta-card-info dd{margin:0;color:#4c6278;overflow-wrap:anywhere}.meta-access-box{background:#f7faff;border:1px solid #e4edf7;padding:14px 16px;border-radius:6px}.meta-access-top{display:flex;align-items:center;gap:10px;font-size:13px;margin-bottom:13px;font-weight:500}.meta-access-top .meta-mini-tag{font-weight:400}.meta-access-top .link{margin-left:auto;font-size:11px;font-weight:400}.meta-access-fields{display:grid;grid-template-columns:82px 1fr;gap:8px;font-size:12px;line-height:1.65;margin:0}.meta-access-fields dt{color:#8c9eaf}.meta-access-fields dd{margin:0;overflow-wrap:anywhere;color:#49637c;font-family:ui-monospace,Consolas,monospace}.meta-access-note{font-size:11px;color:#8fa1b3;margin:12px 0 0;line-height:1.7}.meta-draft-hint{font-size:12px;color:#8597aa;margin:0 0 17px}.meta-api-layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:20px}.meta-request-panel{border:1px solid #e3eaf2;border-radius:6px;padding:17px}.meta-request-panel h3{font-size:13px;font-weight:500;margin:0 0 17px}.meta-request-panel label{font-size:12px;color:#7c8e9f;display:block;margin-bottom:7px}.meta-request-panel .input{font-size:12px;padding:8px 9px;background:white;height:35px}.meta-request-panel .form-field{margin-bottom:13px}.meta-request-page{display:grid;grid-template-columns:1fr 1fr;gap:12px}.meta-request-code{padding:11px;background:#f6f8fb;border:1px solid #e7edf3;border-radius:4px;font:10px/1.8 ui-monospace,Consolas,monospace;color:#74869a;white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0}.meta-request-panel .btn{font-size:12px;height:34px}.meta-request-note{color:#9aa7b3;font-size:11px;line-height:1.8;margin:12px 0 0}.meta-response{background:#18283b;border-radius:7px;display:flex;flex-direction:column;overflow:hidden;min-height:355px;max-height:438px}.meta-response-head{display:flex;gap:9px;align-items:center;padding:12px 15px;border-bottom:1px solid #2b3b4f;color:#d1deec;font-size:12px;flex-shrink:0}.meta-response-head .link{color:#a2bddd;margin-left:auto;font-size:11px}.http-code{color:#83c8a3;font-size:11px}.http-code.error-code{color:#ff9d9d}.meta-response pre{color:#bfd0e5;line-height:1.65;font:11px/1.7 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;padding:16px;margin:0;overflow:auto;flex:1}.meta-response-empty{color:#6f87a2;text-align:center;margin:auto;font-size:12px}.meta-detail-dialog .dialog-foot{padding:16px 27px}.meta-status-banner{color:#9b7c49;background:#fffaf0;border:1px solid #f1e7ce;padding:10px 13px;border-radius:5px;font-size:12px;line-height:1.6;margin-bottom:15px}.meta-detail-title{max-width:75%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.meta-detail-dialog .dialog-head>.meta-status{margin-left:13px}.meta-empty-hint{font-size:12px;color:#8fa1b2;line-height:1.8;max-width:340px}
+@media(max-width:1250px){.top-nav button{font-size:13px}.meta-directorybar{gap:10px}.directory-heading strong{font-size:14px}.meta-directorybar .btn{font-size:12px;padding:0 10px}.meta-directorybar .link{font-size:11px}.meta-form-grid{gap:17px 20px}.meta-api-layout{grid-template-columns:320px minmax(0,1fr)}}
+@media(max-width:900px){.meta-directorybar{flex-wrap:wrap;gap:9px;padding-bottom:12px;margin-bottom:10px}.directory-heading{flex-basis:100%!important}.meta-dialog .dialog-body,.meta-detail-dialog .dialog-body{padding:18px 19px}.meta-head-sub{display:none}.meta-cards-layout{grid-template-columns:195px minmax(0,1fr);gap:12px}.meta-card{padding:17px}.meta-card-info{grid-template-columns:70px 1fr}.meta-api-layout{grid-template-columns:1fr}.meta-response{max-height:330px}.service-view{padding:0 17px}.service-toolbar{flex-wrap:wrap}.service-toolbar .search{flex:1}.meta-detail-summary{grid-template-columns:1fr 1fr}.meta-card-title small{display:none}}
+@media(max-width:580px){.meta-form-grid{grid-template-columns:1fr}.meta-wide{grid-column:auto}.meta-caller{min-width:100%;padding:10px 13px}.meta-scope-head .search{width:100%}.meta-cards-layout{display:flex;flex-direction:column}.meta-cards-list{max-height:130px}.meta-detail-summary{grid-template-columns:1fr;gap:10px}.meta-detail-summary dt{display:inline-block;margin-right:10px}.meta-detail-summary dd{display:inline}.meta-endpoint{gap:6px;padding:10px}.meta-endpoint .demo-address{display:none}.meta-foot-text{display:none}.meta-dialog .dialog-foot,.meta-detail-dialog .dialog-foot{padding:14px 19px}.meta-tabs{gap:17px}.meta-tabs small{display:none}.meta-preview-table{max-height:230px}.meta-detail-dialog{width:calc(100vw - 24px)}.meta-head-sub,.new-feature{display:none}.meta-directorybar>.link{display:none}.meta-card-info{grid-template-columns:65px 1fr}.service-toolbar .btn{margin-left:0}.service-footer span:last-child{display:none}.meta-card-title h3{font-size:14px}.meta-status{font-size:11px}.meta-success small{display:none}}
+
+
+/* Tree selection and access-source whitelist. */
+.meta-tree-select{position:relative;min-width:0}#metaDirectoryError:empty{display:none}#metaDirectoryTrigger[aria-invalid=true]{border-color:#e9a3a3}.directory-list{overflow:auto;flex:1}.directory-list table{min-width:1010px}.directory-list th:last-child{width:485px;min-width:485px}.directory-list .ops{gap:16px}.catalog-description{white-space:normal;line-height:1.7;min-width:180px;max-width:300px;overflow-wrap:anywhere}.catalog-module{font-size:13px;color:#657486;padding:3px 0}.btn.danger{background:#ed6468;border-color:#ed6468;color:#fff}.btn.danger:hover{background:#e45b60;border-color:#e45b60;color:#fff}.meta-tree-select .source-trigger{height:39px}.meta-tree-select .source-trigger>svg:first-child{color:#8aa3bb}.meta-directory-popover{position:absolute;z-index:48;top:45px;left:0;right:0;min-width:310px;padding:10px;background:white;border:1px solid #dce5ef;border-radius:6px;box-shadow:0 9px 28px #284a6d26}.meta-directory-popover .search{height:32px;margin-bottom:7px}.meta-directory-popover .search input{height:28px;font-size:12px}.meta-directory-options{overflow:auto;max-height:285px;min-height:68px}.meta-directory-options .tree-row{min-height:34px;margin:1px 0;font-size:12px;gap:6px;position:relative}.meta-directory-options .tree-row.selected{color:var(--blue);background:#eaf4ff}.meta-directory-options .ncount{font-size:11px;color:#98a8b8}.meta-tree-arrow{width:19px;height:26px;padding:0;display:grid;place-items:center;color:#8899aa;flex:0 0 19px}.meta-tree-arrow svg{width:12px;height:12px}.meta-tree-arrow.open svg{transform:rotate(90deg)}.meta-tree-placeholder{width:19px;flex:0 0 19px}.meta-tree-tick{margin-left:auto;width:14px;height:14px;color:var(--blue)}.meta-directory-options .node-label{flex:1}.meta-tree-selectedpath{padding:8px 3px 0;margin-top:7px;border-top:1px solid #edf1f6;font-size:11px;line-height:1.6;color:#7f94a9;overflow-wrap:anywhere}.meta-directory-options .no-options{padding:20px 5px}
+.whitelist-label{display:flex;align-items:center;gap:8px;margin-bottom:9px}.whitelist-label .field-name{margin-bottom:0!important}.whitelist-label small{color:#94a4b3;font-size:11px}.whitelist-editor{border:1px solid #e0e7ef;border-radius:6px;overflow:hidden}.whitelist-input-row{display:flex;align-items:center;gap:9px;padding:12px;background:#fafcfe}.whitelist-input-row .input{flex:1;min-width:0;height:35px;font-size:12px}.whitelist-input-row .btn{height:35px;padding:0 14px;font-size:12px}.whitelist-input-row .link{font-size:12px;white-space:nowrap;margin:0 3px}.whitelist-items{max-height:146px;overflow:auto;padding:0 12px}.whitelist-entry{display:flex;align-items:center;gap:12px;min-height:43px;padding:8px 2px;border-top:1px solid #eef2f6}.whitelist-address{min-width:0;flex:1;font:12px/1.7 ui-monospace,Consolas,monospace;color:#425d78;overflow-wrap:anywhere}.whitelist-entry .meta-mini-tag{font-size:10px}.whitelist-entry .icon-btn{width:26px;height:26px;color:#9aabba}.whitelist-entry .icon-btn:hover{background:#fff2f1;color:#ed6468}.whitelist-entry .icon-btn svg{width:14px;height:14px}.whitelist-empty{padding:13px 3px 15px;font-size:12px;color:#a3afba;border-top:1px solid #eef2f6}.whitelist-help{font-size:11px;line-height:1.8;color:#8c9cab;margin:8px 0 0}.whitelist-help .link{font-size:11px}.whitelist-error{margin-top:7px}.whitelist-summary{font:12px/1.9 ui-monospace,Consolas,monospace;overflow-wrap:anywhere}.whitelist-summary span{display:block}.whitelist-summary small{color:#98a8b7;font:11px "Microsoft YaHei",sans-serif}.request-source-quick{display:flex;gap:16px;margin-top:8px}.request-source-quick .link{font-size:11px}.source-caption{font-size:10px;color:#98a8b7;line-height:1.7;margin-top:8px}.meta-request-panel #requestSourceIp{font-family:ui-monospace,Consolas,monospace}.meta-request-panel .error:empty{display:none}.meta-detail-summary .whitelist-summary{max-height:110px;overflow:auto}.whitelist-input-row .input[aria-invalid=true]{border-color:#e9a3a3}
+@media(max-width:580px){.meta-directory-popover{min-width:0}.whitelist-input-row{flex-wrap:wrap}.whitelist-input-row>.input{flex-basis:100%;width:100%}.whitelist-input-row .link{margin-left:auto}.whitelist-entry{gap:6px}.meta-directory-options .tree-row{font-size:11px}.meta-tree-selectedpath{font-size:10px}}
+
+.meta-tree-checkbox{appearance:none;width:15px;height:15px;border:1px solid #c5d0dc;border-radius:3px;background:#fff;position:relative;margin:0 3px 0 0;flex:0 0 15px;cursor:pointer}.meta-tree-checkbox:checked,.meta-tree-checkbox:indeterminate{background:var(--blue);border-color:var(--blue)}.meta-tree-checkbox:checked:after{content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}.meta-tree-checkbox:indeterminate:after{content:"";position:absolute;left:3px;top:6px;width:7px;height:2px;background:#fff}.meta-directory-options .partly-selected{color:#4d7297}.meta-tree-footer{display:flex;align-items:center;gap:12px;padding:9px 2px 0;margin-top:8px;border-top:1px solid #edf1f6;font-size:11px;color:#8498ac}.meta-tree-footer>span{margin-right:auto}.meta-tree-footer .link{font-size:12px}.meta-tree-footer .btn{height:28px;padding:0 12px;font-size:12px}.meta-directory-tags{display:flex;flex-wrap:wrap;gap:6px;max-height:72px;overflow:auto;margin-top:8px}.meta-directory-tags:empty{display:none}.meta-directory-tag{display:flex;align-items:center;max-width:100%;gap:5px;border:1px solid #dbe8f8;background:#f2f7fd;color:#4e739a;border-radius:4px;font-size:11px;padding:2px 4px 2px 8px}.meta-directory-tag>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.meta-directory-tag .icon-btn{width:20px;height:20px;color:#8b9fb4}.meta-directory-tag svg{width:12px;height:12px}.meta-directory-help{margin:7px 0 0;font-size:11px;color:#8b9cab;line-height:1.7}.service-multi-dir{max-height:100px;overflow:auto;white-space:normal}.meta-directory-path{font-size:12px;line-height:1.7;overflow-wrap:anywhere}.meta-directory-path+.meta-directory-path{margin-top:5px}.meta-detail-directories{max-height:100px;overflow:auto}.meta-directory-options .tree-row:focus-visible{outline:1px solid #85b5f5;outline-offset:-1px}
+.meta-example-title{display:flex;align-items:center;gap:12px;padding:0 0 13px;margin:0 0 18px;border-bottom:1px solid #e7edf4}.meta-example-title h3{font-size:14px;font-weight:600;margin:0;color:#354b62}.meta-example-title small{margin-left:auto;font-size:11px;color:#8d9dad}
+
+.directory-interfaces-overlay{z-index:40;background:#172b4059}.directory-interfaces-dialog{width:min(1150px,calc(100vw - 48px))}.directory-interfaces-dialog .dialog-body{padding:23px 26px}.interface-manager-toolbar{display:flex;align-items:center;gap:18px;margin-bottom:20px}.interface-manager-toolbar>div{flex:1;min-width:0}.interface-manager-toolbar strong{font-size:14px;font-weight:500;color:#405971;line-height:1.7}.interface-manager-toolbar small{display:block;color:#8a9baa;font-size:12px;line-height:1.7;margin-top:5px}.directory-interface-table{overflow:auto;min-height:220px;max-height:430px;border:1px solid #e4ebf2;border-radius:6px}.directory-interface-table table{min-width:960px}.directory-interface-table th{font-size:12px;height:38px}.directory-interface-table td{font-size:12px;padding-top:14px;padding-bottom:14px}.directory-interface-table td:first-child{min-width:265px}.interface-record-name{font-size:13px;font-weight:500;color:#38516b;display:block;margin-bottom:8px}.interface-record-endpoint{display:block;font:11px/1.7 ui-monospace,Consolas,monospace;color:#8b9caf;white-space:normal;overflow-wrap:anywhere;max-width:305px}.directory-interface-table .ops{gap:15px}.directory-interface-table .ops .link{font-size:12px}.directory-interface-table .empty{height:240px}.interface-edit-address{padding:12px 15px;border:1px solid #dce8f5;background:#f6faff;border-radius:6px;margin-bottom:22px}.interface-edit-address>div{display:flex;align-items:center;gap:10px;min-width:0}.interface-edit-address code{color:#476580;font:12px/1.7 ui-monospace,Consolas,monospace;overflow-wrap:anywhere;min-width:0}.interface-edit-address small{display:block;color:#8194a7;font-size:11px;line-height:1.7;margin-top:7px}.interface-edit-address .address-label{font-size:12px;color:#657e96;white-space:nowrap}.directory-interfaces-dialog .dialog-foot{padding:16px 26px}.interface-manager-count{font-size:12px;color:#8294a6}.meta-directorybar #viewDirectoryInterfaces{display:inline-flex}
+@media(max-width:650px){.interface-manager-toolbar{align-items:flex-start;flex-direction:column;gap:12px}.directory-interfaces-dialog .dialog-body{padding:18px}.interface-edit-address>div{flex-wrap:wrap}.directory-interfaces-dialog{width:calc(100vw - 24px)}}
+</style>
+</head>
+<body>
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h4"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol><symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol><symbol id="i-left" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol><symbol id="i-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"/></symbol><symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="11" cy="5" rx="7" ry="3"/><path d="M4 5v12c0 4 14 4 14 0V5M4 11c0 4 14 4 14 0"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><path d="m9 3-1 3-3 1-2 4 2 2-1 3 4 3 3-1 2 3 4-2v-3l3-2-1-4-3-1-1-3Z"/><circle cx="11" cy="12" r="3"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v.1"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M6 8v12h12V8M10 20v-7h4v7"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M5 17h14l-2-3V9a5 5 0 0 0-10 0v5ZM10 20h4"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h5v5H4zM15 4h5v5h-5zM4 15h5v5H4zM15 15h5v5h-5z"/></symbol><symbol id="i-audit" viewBox="0 0 24 24"><rect x="6" y="3" width="14" height="18" rx="2"/><path d="M10 7h6M10 11h6M10 15h4M3 7v12"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M5 8a8 8 0 0 1 14-2l1 2M4 16l1 2a8 8 0 0 0 14-2"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="5" cy="12" r="3"/><circle cx="18" cy="5" r="3"/><circle cx="18" cy="19" r="3"/><path d="m7.5 10.5 8-4M7.5 13.5l8 4"/></symbol></defs></svg>
+<header class="header">
+<div class="brand"><svg class="brandmark" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 5h16l9 14-9 15H17l5-10h6l4-6-5-7H11Z" fill="#1785f8"/><path d="M12 14h12l5 6-5 7H11l4-6Z" fill="#37b8fb"/><rect x="2" y="16" width="7" height="7" rx="2" fill="#30b8f6"/><rect x="6" y="28" width="6" height="6" rx="1.5" fill="#36b8ef"/></svg><span>烛龙大数据平台</span></div>
+<svg class="app-grid"><use href="#i-grid"/></svg><nav class="top-nav" aria-label="主导航"><span>数据汇聚</span><span>数据资源</span><span>数据开发</span><span>资产管理</span><button id="navApplications" type="button">数据应用</button><button class="active" id="navSystem" type="button">系统管理</button></nav>
+<div class="header-right"><span class="prototype-label" title="本地演示数据，刷新或重置后恢复初始状态">交互原型 · 演示数据</span><button class="icon-btn" id="resetDemo" title="重置演示" aria-label="重置演示"><svg><use href="#i-refresh"/></svg></button><div class="user"><div class="avatar">管</div><span>管理员</span><svg style="width:12px"><use href="#i-down"/></svg></div></div>
+</header>
+<div class="frame"><aside class="side"><div class="side-item"><svg><use href="#i-db"/></svg>数据源管理</div><div class="side-item"><svg><use href="#i-settings"/></svg>配置管理<svg class="chev" style="transform:rotate(180deg)"><use href="#i-down"/></svg></div><div class="side-item sub active">目录配置</div><div class="side-item sub">FTP配置</div><div class="side-item sub">标签管理</div><div class="side-item"><svg><use href="#i-audit"/></svg>审核管理<svg class="chev"><use href="#i-down"/></svg></div></aside>
+<main class="main"><div class="page-head"><button class="back" id="goBack" aria-label="返回目录配置"><svg><use href="#i-left"/></svg></button><div class="page-title" id="pageTitle">资产目录</div></div>
+<div class="directory-list" id="directoryList" hidden><div class="asset-toolbar"><div class="search"><svg><use href="#i-search"/></svg><input id="catalogSearch" placeholder="目录名称" aria-label="查找目录"></div></div><table><thead><tr><th>目录名称</th><th>所属模块</th><th>目录状态</th><th>描述</th><th>操作</th></tr></thead><tbody id="catalogRows"></tbody></table></div>
+<div class="workspace" id="workspace"><section class="directory-pane"><div class="tree-toolbar"><strong>目录配置</strong><button class="btn primary" id="addNode"><svg><use href="#i-plus"/></svg>新增目录节点</button></div><div class="tree" id="mainTree" role="tree" aria-label="资产目录树"></div></section>
+<section class="table-pane"><div class="meta-directorybar"><div class="directory-heading"><strong id="metaCurrentName"></strong><small id="metaCurrentPath"></small></div><button class="link" id="viewDirectoryInterfaces">接口配置（0）</button><button class="btn copy" id="openMetaPublish"><svg><use href="#i-share"/></svg>发布元数据接口</button></div><div class="asset-toolbar"><div class="search"><svg><use href="#i-search"/></svg><input id="assetSearch" placeholder="资产名称/数据表名称" aria-label="搜索当前目录资产"></div><div class="actions"><button class="btn copy" id="openCopy"><svg><use href="#i-copy"/></svg>复制资产</button><button class="btn primary" id="originalAdd">添加资产</button></div></div><div class="table-scroll" id="mainTableArea"></div><div class="pager" id="mainPager"></div></section></div>
+
+<section class="service-view" id="serviceView" hidden>
+ <div class="service-tabs"><span>目录元数据接口</span></div>
+ <div class="service-toolbar"><div class="search"><svg><use href="#i-search"/></svg><input id="serviceSearch" placeholder="接口名称 / 关联目录" aria-label="搜索元数据接口"></div><select id="serviceStatus" aria-label="筛选接口状态"><option value="">全部状态</option><option value="enabled">启用</option><option value="disabled">停用</option></select><button class="btn primary" id="newMetaService"><svg><use href="#i-plus"/></svg>新建元数据接口</button></div>
+ <div class="service-tablebox" id="serviceTable"></div><div class="service-footer"><span id="serviceCount"></span><button class="link" id="returnCatalog">返回目录配置</button></div>
+</section>
+</main></div>
+<div class="overlay" id="copyOverlay" hidden><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="copyTitle"><header class="dialog-head"><h2 id="copyTitle">复制资产</h2><button class="icon-btn" id="closeCopy" aria-label="关闭复制弹窗"><svg><use href="#i-close"/></svg></button></header><div class="dialog-body">
+<div class="field-line"><span class="field-label">目标目录</span><div class="target-path"><svg><use href="#i-folder"/></svg><span id="targetPath"></span></div></div>
+<div class="field-line"><label class="field-label" for="sourceTrigger">来源目录</label><div class="source-wrap"><button id="sourceTrigger" class="source-trigger" aria-expanded="false" aria-haspopup="tree"><span class="placeholder">请选择来源目录</span><svg><use href="#i-down"/></svg></button><div class="source-popover" id="sourcePopover" hidden><div class="search"><svg><use href="#i-search"/></svg><input id="sourceSearch" placeholder="搜索目录名称" aria-label="搜索来源目录"></div><div class="source-options" id="sourceOptions" role="tree" aria-label="来源目录树"></div></div></div></div>
+<div class="copy-toolbar"><strong>选择资产 <small id="sourceTotal"></small></strong><div class="search"><svg><use href="#i-search"/></svg><input id="copySearch" placeholder="资产名称/数据表名称" aria-label="搜索来源资产" disabled></div></div>
+<div class="copy-tablebox" id="copyTableArea"></div><div class="pager copy-pager" id="copyPager"></div><p class="copy-note"><svg><use href="#i-info"/></svg><span>复制资产资料与数据关联，新增资产为未上架状态。</span></p></div><footer class="dialog-foot"><span class="selection">已选择 <b id="selectedCount">0</b> 项资产</span><span class="spacer"></span><button class="btn" id="cancelCopy">取消</button><button class="btn primary" id="confirmCopy" disabled>复制选中资产</button></footer></section></div>
+<div class="overlay" id="secondaryOverlay" hidden><section class="dialog small-dialog" role="dialog" aria-modal="true" aria-labelledby="secondaryTitle"><header class="dialog-head"><h2 id="secondaryTitle"></h2><button class="icon-btn" id="closeSecondary" aria-label="关闭窗口"><svg><use href="#i-close"/></svg></button></header><div class="dialog-body" id="secondaryBody"></div><footer class="dialog-foot" id="secondaryFoot"></footer></section></div>
+
+<div class="overlay directory-interfaces-overlay" id="directoryInterfacesOverlay" hidden>
+ <section class="dialog directory-interfaces-dialog" role="dialog" aria-modal="true" aria-labelledby="directoryInterfacesTitle">
+  <header class="dialog-head"><h2 id="directoryInterfacesTitle">元数据接口配置</h2><button class="icon-btn" id="closeDirectoryInterfaces" aria-label="关闭接口配置列表"><svg><use href="#i-close"/></svg></button></header>
+  <div class="dialog-body"><div class="interface-manager-toolbar"><div><strong id="directoryInterfacesScope"></strong><small id="directoryInterfacesHint"></small></div><button class="btn primary" id="newDirectoryInterface"><svg><use href="#i-plus"/></svg>发布新接口</button></div><div class="directory-interface-table" id="directoryInterfacesTable"></div></div>
+  <footer class="dialog-foot"><span class="interface-manager-count" id="directoryInterfacesCount"></span><span class="spacer"></span><button class="btn" id="finishDirectoryInterfaces">关闭</button></footer>
+ </section>
+</div>
+<div class="overlay meta-overlay" id="metaOverlay" hidden>
+ <section class="dialog meta-dialog" role="dialog" aria-modal="true" aria-labelledby="metaTitle">
+  <header class="dialog-head"><h2 id="metaTitle">发布元数据接口</h2><span class="meta-head-sub">目录发布</span><button class="icon-btn" id="closeMeta" aria-label="关闭发布窗口"><svg><use href="#i-close"/></svg></button></header>
+  <div class="dialog-body">
+   <div class="interface-edit-address" id="metaEditAddress" hidden><div><span class="address-label">接口地址</span><span class="meta-method">GET</span><code id="metaEditEndpoint"></code></div><small>保存后接口地址保持不变，修改对该接口的全部调用方生效。</small></div>
+   <h3 class="meta-section-title"><span class="number">1</span>接口配置</h3>
+   <div class="meta-form-grid">
+    <div class="meta-form-field"><label class="field-name required" for="metaName">接口名称</label><input class="input" id="metaName" placeholder="请输入接口名称" maxlength="60"><div class="error" id="metaNameError"></div></div>
+    <div class="meta-form-field"><label class="field-name required" for="metaDirectoryTrigger">关联目录</label><div class="meta-tree-select" id="metaTreeSelect"><button class="source-trigger" id="metaDirectoryTrigger" aria-haspopup="tree" aria-expanded="false" aria-controls="metaDirectoryPopover" aria-describedby="metaDirectoryError metaDirectoryHelp"><svg><use href="#i-folder"/></svg><span id="metaDirectoryValue"></span><svg><use href="#i-down"/></svg></button><div class="meta-directory-popover" id="metaDirectoryPopover" hidden><div class="search"><svg><use href="#i-search"/></svg><input id="metaDirectorySearch" placeholder="搜索目录名称" aria-label="搜索关联目录"></div><div class="meta-directory-options" id="metaDirectoryTree" role="tree" aria-label="关联目录树" aria-multiselectable="true"></div><div class="meta-tree-footer"><span id="metaSelectedDirectoryPath"></span><button class="link" id="clearMetaDirectories">清空</button><button class="btn primary" id="finishDirectoryPicker">完成</button></div></div><div class="meta-directory-tags" id="metaDirectoryTags" aria-label="已选目录"></div></div><div class="error" id="metaDirectoryError" role="alert"></div><p class="meta-directory-help" id="metaDirectoryHelp">支持多选；勾选父目录将全选下级，可取消个别子目录。</p></div>
+    <div class="meta-form-field meta-wide"><div class="whitelist-label"><label class="field-name required" for="metaWhitelistAddress">访问白名单</label><small>按请求来源 IP 限制访问</small></div><div class="whitelist-editor"><div class="whitelist-input-row"><input class="input" id="metaWhitelistAddress" placeholder="输入 IP 或网段，例如 10.20.1.10、10.20.2.0/24" autocomplete="off" spellcheck="false" aria-describedby="metaWhitelistHelp metaWhitelistError"><button class="btn" id="addWhitelistAddress">添加地址</button></div><div class="whitelist-items" id="metaWhitelistList"></div></div><div class="error whitelist-error" id="metaWhitelistError"></div><p class="whitelist-help" id="metaWhitelistHelp">支持 IPv4、IPv6 或网段（CIDR），多个地址可用逗号分隔。白名单外的来源不能访问。</p></div>
+   </div>
+   <div class="meta-divider"></div>
+   <div class="meta-scope-head"><h3 class="meta-section-title"><span class="number">2</span>发布范围预览</h3><span class="meta-scope-count" id="metaScopeCount"></span><div class="search"><svg><use href="#i-search"/></svg><input id="metaScopeSearch" placeholder="搜索范围内的资产" aria-label="搜索发布范围内的资产"></div></div>
+   <div class="meta-preview-table" id="metaPreviewTable"></div>
+   <div class="meta-inline-note"><svg><use href="#i-info"/></svg>仅返回关联目录内已上架资产的元数据，资产上架或下架后同步更新接口返回范围。</div>
+  </div>
+  <footer class="dialog-foot"><span class="meta-foot-text">数据访问沿用原有数据源或数据服务的权限。</span><span class="spacer"></span><button class="btn" id="cancelMeta">取消</button><button class="btn primary" id="saveMeta">发布接口</button></footer>
+ </section>
+</div>
+<div class="overlay meta-detail-overlay" id="metaDetailOverlay" hidden>
+ <section class="dialog meta-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="metaDetailTitle">
+  <header class="dialog-head"><h2 class="meta-detail-title" id="metaDetailTitle"></h2><span id="metaDetailStatus"></span><button class="icon-btn" id="closeMetaDetail" aria-label="关闭接口详情"><svg><use href="#i-close"/></svg></button></header>
+  <div class="dialog-body" id="metaDetailBody"></div>
+  <footer class="dialog-foot"><span class="meta-foot-text" id="metaDetailFootNote"></span><span class="spacer"></span><button class="btn primary" id="finishMetaDetail">完成</button></footer>
+ </section>
+</div>
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+<script>
+(() => {
+'use strict';
+const $=id=>document.getElementById(id), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const icon=(n,cls='')=>`<svg class="${cls}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+let catalogs,nodes,assets,currentNode='infra',mainPage=1,mainSize=10,highlighted=new Set(),copyState=null,toastTimer,lastFocus=null,secondaryReturn=null;
+const expanded=new Set(['resource','infra','natural','remote','business','contract']);
+function resetData(){
+ catalogs=[
+  {id:'assets',name:'资产目录',module:'资产目录',description:'按业务主题组织数据资产',enabled:true},
+  {id:'resources',name:'资源目录',module:'资源目录',description:'用于数据资源的清查盘点',enabled:true},
+  {id:'sources',name:'数据源目录',module:'—',description:'',enabled:true}
+ ];
+ nodes=[{id:'resource',name:'资源资产',parent:null},{id:'water',name:'水利工程',parent:'resource'},{id:'infra',name:'农业基础设施',parent:'resource'},{id:'yard',name:'晒场',parent:'infra'},{id:'store',name:'仓储',parent:'infra'},{id:'dryer',name:'烘干塔',parent:'infra'},{id:'natural',name:'自然资源',parent:'resource'},{id:'land',name:'耕地',parent:'natural'},{id:'remote',name:'农业遥感',parent:'resource'},{id:'interpret',name:'遥感解译',parent:'remote'},{id:'satellite',name:'卫星',parent:'remote'},{id:'business',name:'经营管理',parent:null},{id:'contract',name:'土地承包',parent:'business'},{id:'subsidy',name:'农机补贴',parent:'contract'},{id:'topic',name:'年度专题',parent:null}];
+ assets=[];const seedNames=['qxj1','资产基本信息4','test-database-20251215','SAFFA','test-database-20251212','test20251212','M20251211','数据集1208003','数据集1208002','数据集141241243'];
+ const owners=['刘金','徐众','夏少冲','晏聪'];
+ function add(name,dir,i){const id='asset-'+(assets.length+1);assets.push({id,originId:id,name,directoryId:dir,table:'data_'+dir+'_'+String(i+1).padStart(3,'0'),source:'农业业务数据库',description:name+'相关数据。',published:i%4<2,owner:owners[i%owners.length],publisher:i%4<2?owners[(i+1)%owners.length]:'',publishedAt:i%4<2?'2026-06-'+String(10+i%18).padStart(2,'0')+' 17:33:35':'',apis:i%3,createdAt:'2026-05-13 11:25:05'});}
+ for(let i=0;i<19;i++)add(seedNames[i]||['晒场基础信息','晒场面积统计','晒场使用记录','晒场设施台账','晒场分布数据','晒场作业记录','晒场维护记录','晒场设备清单','晒场年度统计'][i-10],'yard',i);
+ add('粮食仓储基础信息','store',0);for(let i=0;i<2;i++)add(['烘干塔基础信息','烘干作业台账'][i],'dryer',i);
+ for(let i=0;i<11;i++)add(['耕地基础信息','地块承包信息','地块面积统计','作物种植分布','耕地质量记录','土壤采样数据','土地利用现状','高标准农田数据','耕地调查记录','地块边界数据','年度耕地统计'][i],'land',i);
+ add('农作物遥感解译成果','interpret',0);for(let i=0;i<3;i++)add(['卫星影像目录','年度遥感影像','遥感影像覆盖范围'][i],'satellite',i);for(let i=0;i<3;i++)add(['农机补贴基础台账','年度农机补贴记录','补贴申请统计'][i],'subsidy',i);
+}
+function node(id){return nodes.find(n=>n.id===id)}
+function descendants(id){let result=[id];for(const n of nodes.filter(n=>n.parent===id))result.push(...descendants(n.id));return result}
+function path(id){const n=node(id);return n?(n.parent?path(n.parent)+' / ':'')+n.name:''}
+function count(id){const ids=new Set(descendants(id));return assets.filter(a=>ids.has(a.directoryId)).length}
+function inNode(id){const ids=new Set(descendants(id));return assets.filter(a=>ids.has(a.directoryId))}
+function matches(a,q){return !q||(a.name+' '+a.table).toLowerCase().includes(q.toLowerCase())}
+function renderTree(){let html='';function walk(parent,depth){for(const n of nodes.filter(n=>n.parent===parent)){const children=nodes.some(x=>x.parent===n.id);html+=`<div class="tree-row ${n.id===currentNode?'selected':''}" role="treeitem" tabindex="0" aria-selected="${n.id===currentNode}" ${children?`aria-expanded="${expanded.has(n.id)}"`:''} data-node="${n.id}" style="padding-left:${depth*24+5}px"><span class="arrow" data-toggle="${n.id}">${children?(expanded.has(n.id)?'▾':'▸'):''}</span><span class="node-label">${esc(n.name)}<span class="ncount">(${count(n.id)})</span></span></div>`;if(children&&expanded.has(n.id))walk(n.id,depth+1)}}walk(null,0);$('mainTree').innerHTML=html;}
+function empty(title,sub=''){return `<div class="empty">${icon('folder')}<strong>${title}</strong>${sub?`<p>${sub}</p>`:''}</div>`}
+function pagerHtml(total,page,size,kind){const pages=Math.max(1,Math.ceil(total/size));let nums='';for(let i=Math.max(1,page-1);i<=Math.min(pages,page+2);i++)nums+=`<button class="page-number ${i===page?'active':''}" data-page="${i}" data-kind="${kind}" aria-label="第 ${i} 页">${i}</button>`;return `<span>共 ${total} ${kind==='copy'?'项':'条'}</span><button class="page-number" data-page="${page-1}" data-kind="${kind}" aria-label="上一页" ${page===1?'disabled':''}>${icon('left')}</button>${nums}<button class="page-number" data-page="${page+1}" data-kind="${kind}" aria-label="下一页" ${page===pages?'disabled':''}>${icon('right')}</button><select data-size="${kind}" aria-label="${kind==='copy'?'来源资产':'当前资产'}每页条数">${[5,10,20].map(s=>`<option value="${s}" ${s===size?'selected':''}>${s} 条/页</option>`).join('')}</select>${kind==='main'?'<span class="jump-label">跳至</span><input class="jump" aria-label="跳转页码" inputmode="numeric"><span class="jump-label">页</span>':''}`}
+function renderMain(){renderMetadataDirectory();renderTree();let list=inNode(currentNode).filter(a=>matches(a,$('assetSearch').value));mainPage=Math.max(1,Math.min(mainPage,Math.ceil(list.length/mainSize)||1));const shown=list.slice((mainPage-1)*mainSize,mainPage*mainSize);$('mainTableArea').innerHTML=shown.length?`<table class="main-table"><thead><tr><th>资产名称</th><th>是否上架</th><th>添加人</th><th>上架人</th><th>API个数</th><th>上架时间</th><th>操作</th></tr></thead><tbody>${shown.map(a=>`<tr class="${highlighted.has(a.id)?'row-added':''}"><td title="${esc(a.name)}">${esc(a.name)}</td><td class="${a.published?'published':'unpublished'}">${a.published?'已上架':'未上架'}</td><td>${esc(a.owner)}</td><td>${esc(a.publisher)||'-'}</td><td>${a.apis}</td><td>${esc(a.publishedAt)||'-'}</td><td><div class="ops"><button class="link" data-act="publish" data-id="${a.id}">${a.published?'下架':'上架'}</button><button class="link" data-act="api" data-id="${a.id}" ${a.apis===0?'disabled':''}>API管理</button><button class="link" data-act="detail" data-id="${a.id}">详情</button><button class="link danger" data-act="delete" data-id="${a.id}" ${a.published?'disabled':''}>删除</button></div></td></tr>`).join('')}</tbody></table>`:empty($('assetSearch').value?'没有找到匹配的资产':'当前目录暂无资产',$('assetSearch').value?'请调整搜索关键词':'可添加资产，或从其他目录复制资产');$('mainPager').innerHTML=pagerHtml(list.length,mainPage,mainSize,'main');}
+function selectNode(id){currentNode=id;mainPage=1;$('assetSearch').value='';renderMain()}
+function toast(message,info=false){clearTimeout(toastTimer);$('toastContainer').innerHTML=`<div class="toast ${info?'info':''}">${icon(info?'info':'check')}<span>${esc(message)}</span></div>`;toastTimer=setTimeout(()=>$('toastContainer').innerHTML='',3500)}
+function showCopy(){lastFocus=document.activeElement;copyState={target:currentNode,source:null,page:1,size:5,selected:new Set(),busy:false};$('targetPath').textContent=path(currentNode);$('sourceTrigger').innerHTML='<span class="placeholder">请选择来源目录</span>'+icon('down');$('copySearch').value='';$('copySearch').disabled=true;$('sourceSearch').value='';$('confirmCopy').innerHTML='复制选中资产';$('copyOverlay').hidden=false;document.body.style.overflow='hidden';setSourceOpen(false);renderCopy();$('sourceTrigger').focus()}
+function hideCopy(){if(copyState?.busy)return;$('copyOverlay').hidden=true;setSourceOpen(false);copyState=null;document.body.style.overflow='';lastFocus?.focus()}
+function setSourceOpen(open){$('sourcePopover').hidden=!open;$('sourceTrigger').classList.toggle('open',open);$('sourceTrigger').setAttribute('aria-expanded',String(open));if(open){renderSource();$('sourceSearch').focus()}}
+function renderSource(){if(!copyState)return;const q=$('sourceSearch').value.trim().toLowerCase();let html='';function walk(parent,depth){for(const n of nodes.filter(n=>n.parent===parent)){if(q&&!path(n.id).toLowerCase().includes(q)&&!descendants(n.id).some(id=>node(id).name.toLowerCase().includes(q)))continue;html+=`<button class="source-option ${copyState.source===n.id?'selected':''}" role="treeitem" style="padding-left:${depth*22+9}px" data-source="${n.id}" ${n.id===copyState.target?'disabled':''}>${icon('folder')}<span>${esc(n.name)}</span><span>${n.id===copyState.target?'当前目标':count(n.id)}</span></button>`;walk(n.id,depth+1)}}walk(null,0);$('sourceOptions').innerHTML=html||'<div class="no-options">没有找到匹配的目录</div>'}
+function sourceSelect(id){if(!copyState||id===copyState.target)return;copyState.source=id;copyState.page=1;copyState.selected.clear();$('copySearch').value='';$('copySearch').disabled=false;$('sourceTrigger').innerHTML='<span>'+esc(path(id))+'</span>'+icon('down');setSourceOpen(false);renderCopy();$('copySearch').focus()}
+function alreadyExists(a){return inNode(copyState.target).some(x=>x.originId===a.originId)}
+function filteredSource(){return copyState?.source?inNode(copyState.source).filter(a=>matches(a,$('copySearch').value)):[]}
+function pageSource(){const list=filteredSource();return list.slice((copyState.page-1)*copyState.size,copyState.page*copyState.size)}
+function renderCopy(){if(!copyState)return;const list=filteredSource();copyState.page=Math.max(1,Math.min(copyState.page,Math.ceil(list.length/copyState.size)||1));const rows=pageSource();$('sourceTotal').textContent=copyState.source?`共 ${list.length} 项`:'';
+ $('copyTableArea').innerHTML=!copyState.source?empty('请选择来源目录','选择目录后，可勾选需要复制的资产'):!rows.length?empty($('copySearch').value?'没有找到匹配的资产':'该目录暂无资产',$('copySearch').value?'请调整搜索关键词':'请选择其他来源目录'):`<table class="copy-table"><thead><tr><th><input type="checkbox" id="selectPage" aria-label="全选当前页可复制资产" ${rows.every(alreadyExists)?'disabled':''}></th><th class="name-cell">资产名称</th><th class="path-cell">所属目录</th><th class="state-cell">是否上架</th><th class="api-cell">API个数</th><th class="exist-cell"></th></tr></thead><tbody>${rows.map(a=>{const exists=alreadyExists(a);return `<tr class="${exists?'exists':copyState.selected.has(a.id)?'chosen':''}"><td><input type="checkbox" data-check="${a.id}" aria-label="选择资产 ${esc(a.name)}" ${exists?'disabled':''} ${copyState.selected.has(a.id)?'checked':''}></td><td class="ellip" title="${esc(a.name)}">${esc(a.name)}</td><td class="path-cell ellip" title="${esc(path(a.directoryId))}">${esc(path(a.directoryId))}</td><td class="${a.published?'published':'unpublished'}">${a.published?'已上架':'未上架'}</td><td>${a.apis}</td><td class="exist-cell">${exists?'<span class="existing-badge">已存在</span>':''}</td></tr>`}).join('')}</tbody></table>`;
+ $('copyPager').innerHTML=copyState.source?pagerHtml(list.length,copyState.page,copyState.size,'copy'):'';const pageCheck=$('selectPage');if(pageCheck){const available=rows.filter(a=>!alreadyExists(a)),n=available.filter(a=>copyState.selected.has(a.id)).length;pageCheck.checked=available.length>0&&n===available.length;pageCheck.indeterminate=n>0&&n<available.length;}$('selectedCount').textContent=copyState.selected.size;$('confirmCopy').disabled=copyState.selected.size===0||copyState.busy;
+}
+function selectAsset(id,checked){const a=assets.find(x=>x.id===id);if(!a||alreadyExists(a))return;if(checked){if([...copyState.selected].some(key=>assets.find(x=>x.id===key)?.originId===a.originId)){toast('已选择同一来源的资产',true);renderCopy();return;}copyState.selected.add(id)}else copyState.selected.delete(id);renderCopy()}
+function copyAssets(){if(!copyState||copyState.busy||!copyState.selected.size)return;copyState.busy=true;$('copyOverlay').querySelector('.dialog-body').inert=true;$('confirmCopy').disabled=true;$('cancelCopy').disabled=true;$('closeCopy').disabled=true;$('confirmCopy').innerHTML='<span class="spinner"></span>正在复制';
+ setTimeout(()=>{const chosen=[...copyState.selected].map(id=>assets.find(a=>a.id===id)).filter(Boolean);const created=[];for(const a of chosen){if(alreadyExists(a))continue;const id='copied-'+Date.now()+'-'+created.length;created.push({...a,id,originId:a.originId,directoryId:copyState.target,published:false,publisher:'',publishedAt:'',owner:'管理员',apis:0,copiedFrom:a.id,createdAt:timeNow()})}assets.unshift(...created);currentNode=copyState.target;mainPage=1;$('assetSearch').value='';highlighted=new Set(created.map(a=>a.id));copyState.busy=false;$('copyOverlay').querySelector('.dialog-body').inert=false;$('cancelCopy').disabled=false;$('closeCopy').disabled=false;hideCopy();renderMain();toast(`已复制 ${created.length} 项资产`);$('mainTableArea').scrollTop=0;},450)
+}
+function timeNow(){return new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date())}
+function showSecondary(title,body,buttons){secondaryReturn=document.activeElement;$('secondaryTitle').textContent=title;$('secondaryBody').innerHTML=body;$('secondaryFoot').innerHTML=buttons;$('secondaryOverlay').hidden=false;document.body.style.overflow='hidden';setTimeout(()=>$('secondaryBody').querySelector('input,select')?.focus(),20)}
+function hideSecondary(){$('secondaryOverlay').hidden=true;restoreScroll();secondaryReturn?.focus()}
+function showAddNode(){const options='<option value="">一级目录</option>'+nodes.map(n=>`<option value="${n.id}" ${n.id===currentNode?'selected':''}>${esc(path(n.id))}</option>`).join('');showSecondary('新增目录节点',`<div class="form-field"><label for="nodeParent">上级目录</label><select class="input" id="nodeParent">${options}</select></div><div class="form-field"><label for="nodeName">目录名称</label><input class="input" id="nodeName" maxlength="40" placeholder="请输入目录名称"><div class="error" id="nodeError"></div></div>`,'<button class="btn" data-secondary="cancel">取消</button><button class="btn primary" data-secondary="save-node">确定</button>')}
+function addNode(){const name=$('nodeName').value.trim(),parent=$('nodeParent').value||null;if(!name){$('nodeError').textContent='请输入目录名称';return}if(nodes.some(n=>n.parent===parent&&n.name===name)){$('nodeError').textContent='同级目录中已存在该名称';return}const id='node-'+Date.now();nodes.push({id,name,parent});if(parent)expanded.add(parent);hideSecondary();selectNode(id);toast('目录节点已添加')}
+function showDetails(a){showSecondary('资产详情',`<dl class="detail-list"><dt>资产名称</dt><dd>${esc(a.name)}</dd><dt>所属目录</dt><dd>${esc(path(a.directoryId))}</dd><dt>数据来源</dt><dd>${esc(a.source)}</dd><dt>关联数据表</dt><dd>${esc(a.table)}</dd><dt>是否上架</dt><dd class="${a.published?'':'unpublished'}">${a.published?'已上架':'未上架'}</dd><dt>添加人</dt><dd>${esc(a.owner)}</dd><dt>资产说明</dt><dd>${esc(a.description)}</dd></dl>`,'<button class="btn primary" data-secondary="cancel">关闭</button>')}
+function showApi(a){showSecondary('API管理',`<p class="demo-support">现有 API 管理流程不在本次原型的演示范围内。</p><dl class="detail-list"><dt>资产名称</dt><dd>${esc(a.name)}</dd><dt>API个数</dt><dd>${a.apis}</dd></dl>`,'<button class="btn primary" data-secondary="cancel">关闭</button>')}
+function showOriginalAdd(){showSecondary('添加资产','<p class="notice">此入口保留现有添加流程。</p><p class="demo-support">本次原型展示资产复制与元数据接口发布，原有添加表单沿用系统实现。</p>','<button class="btn primary" data-secondary="cancel">关闭</button>')}
+function showCatalog(){ $('workspace').hidden=true;$('directoryList').hidden=false;$('pageTitle').textContent='目录配置';$('goBack').style.visibility='hidden';renderCatalog()}
+function renderCatalog(){
+ const q=$('catalogSearch').value.trim(),rows=catalogs.filter(r=>r.name.includes(q));
+ $('catalogRows').innerHTML=rows.length?rows.map(r=>`<tr data-catalog-id="${r.id}"><td>${esc(r.name)}</td><td>${esc(r.module)}</td><td><span style="color:${r.enabled?'#67ad43':'#939da7'}">${r.enabled?'启用':'禁用'}</span></td><td class="catalog-description" title="${esc(r.description)}">${esc(r.description)||'—'}</td><td><div class="ops"><button class="link" data-catalog-action="configure" data-id="${r.id}" ${r.id!=='assets'?'disabled':''}>目录配置</button>${r.id==='assets'?`<button class="link" data-catalog-action="publish" data-id="${r.id}" ${r.enabled?'':'disabled'}>发布元数据接口</button><button class="link" data-catalog-action="interfaces" data-id="${r.id}">接口配置（${interfaces.length}）</button>`:''}<button class="link" data-catalog-action="toggle" data-id="${r.id}">${r.enabled?'禁用':'启用'}</button><button class="link" data-catalog-action="edit" data-id="${r.id}">编辑</button><button class="link danger" data-catalog-action="delete" data-id="${r.id}">删除</button></div></td></tr>`).join(''):'<tr><td colspan="5"><div class="empty"><strong>'+ (q?'未找到匹配的目录':'暂无目录') +'</strong></div></td></tr>';
+}
+function getAssetCatalog(){return catalogs.find(r=>r.id==='assets');}
+function assetCatalogName(){return getAssetCatalog()?.name||'资产目录';}
+function showCatalogToggle(id){
+ const record=catalogs.find(r=>r.id===id);if(!record)return;
+ const label=record.enabled?'禁用':'启用';
+ showSecondary(label+'目录',`<p class="notice">确定${label}“${esc(record.name)}”吗？</p>`,`<button class="btn" data-secondary="cancel">取消</button><button class="btn primary" data-secondary="catalog-toggle" data-id="${id}">确定${label}</button>`);
+}
+function showCatalogEdit(id){
+ const record=catalogs.find(r=>r.id===id);if(!record)return;
+ showSecondary('编辑目录',`<div class="form-field"><label for="catalogEditName">目录名称</label><input class="input" id="catalogEditName" value="${esc(record.name)}" maxlength="40" placeholder="请输入目录名称"><div class="error" id="catalogEditError"></div></div><div class="form-field"><label>所属模块</label><div class="catalog-module">${esc(record.module)}</div></div><div class="form-field"><label for="catalogEditDescription">描述</label><textarea class="input" id="catalogEditDescription" rows="3" maxlength="200" placeholder="请输入目录描述">${esc(record.description)}</textarea></div>`,`<button class="btn" data-secondary="cancel">取消</button><button class="btn primary" data-secondary="catalog-save" data-id="${id}">保存</button>`);
+}
+function saveCatalogEdit(id){
+ const record=catalogs.find(r=>r.id===id);if(!record)return;
+ const name=$('catalogEditName').value.trim(),error=!name?'请输入目录名称':catalogs.some(r=>r.id!==id&&r.name===name)?'已存在同名目录，请调整名称':'';
+ $('catalogEditError').textContent=error;if(error){$('catalogEditName').focus();return;}
+ record.name=name;record.description=$('catalogEditDescription').value.trim();
+ hideSecondary();renderCatalog();toast('目录已更新');
+}
+function showCatalogDelete(id){
+ const record=catalogs.find(r=>r.id===id);if(!record)return;
+ showSecondary('删除目录',`<p class="notice">确定删除“${esc(record.name)}”吗？</p>`,`<button class="btn" data-secondary="cancel">取消</button><button class="btn danger" data-secondary="catalog-delete" data-id="${id}">确定删除</button>`);
+}
+
+function enterAssets(){if(!getAssetCatalog()){showCatalog();return;}$('workspace').hidden=false;$('directoryList').hidden=true;$('pageTitle').textContent=assetCatalogName();$('goBack').style.visibility='visible';renderMain()}
+$('mainTree').addEventListener('click',e=>{const t=e.target.closest('[data-toggle]');if(t){expanded.has(t.dataset.toggle)?expanded.delete(t.dataset.toggle):expanded.add(t.dataset.toggle);renderTree();return;}const row=e.target.closest('[data-node]');if(row)selectNode(row.dataset.node)});
+$('mainTree').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const row=e.target.closest('[data-node]');if(row){e.preventDefault();selectNode(row.dataset.node)}}});
+$('assetSearch').addEventListener('input',()=>{mainPage=1;renderMain()});$('openCopy').addEventListener('click',showCopy);$('closeCopy').addEventListener('click',hideCopy);$('cancelCopy').addEventListener('click',hideCopy);$('confirmCopy').addEventListener('click',copyAssets);
+$('sourceTrigger').addEventListener('click',()=>setSourceOpen($('sourcePopover').hidden));$('sourceSearch').addEventListener('input',renderSource);$('sourceOptions').addEventListener('click',e=>{const b=e.target.closest('[data-source]');if(b&&!b.disabled)sourceSelect(b.dataset.source)});
+$('copySearch').addEventListener('input',()=>{copyState.page=1;renderCopy()});$('copyTableArea').addEventListener('change',e=>{if(e.target.id==='selectPage'){const checked=e.target.checked;for(const a of pageSource().filter(a=>!alreadyExists(a))){if(checked){if(![...copyState.selected].some(id=>assets.find(x=>x.id===id)?.originId===a.originId))copyState.selected.add(a.id)}else copyState.selected.delete(a.id)}renderCopy()}else if(e.target.dataset.check)selectAsset(e.target.dataset.check,e.target.checked)});
+document.addEventListener('click',e=>{if(!e.target.closest('.source-wrap')&&!$('sourcePopover').hidden)setSourceOpen(false);const page=e.target.closest('[data-page]');if(page&&!page.disabled){if(page.dataset.kind==='copy'){copyState.page=+page.dataset.page;renderCopy()}else{mainPage=+page.dataset.page;renderMain()}}});
+document.addEventListener('change',e=>{const kind=e.target.dataset.size;if(kind==='copy'){copyState.size=+e.target.value;copyState.page=1;renderCopy()}else if(kind==='main'){mainSize=+e.target.value;mainPage=1;renderMain()}});
+$('mainPager').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('.jump')){mainPage=Math.max(1,parseInt(e.target.value)||1);renderMain()}});
+$('addNode').addEventListener('click',showAddNode);$('closeSecondary').addEventListener('click',hideSecondary);$('secondaryFoot').addEventListener('click',e=>{const action=e.target.dataset.secondary;if(action==='cancel')hideSecondary();if(action==='save-node')addNode();if(action==='delete'){assets=assets.filter(a=>a.id!==e.target.dataset.id);hideSecondary();renderMain();toast('资产已删除')}});
+$('secondaryBody').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='nodeName')addNode()});
+$('mainTableArea').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;const a=assets.find(x=>x.id===b.dataset.id);if(!a)return;if(b.dataset.act==='detail')showDetails(a);if(b.dataset.act==='api')showApi(a);if(b.dataset.act==='publish'){a.published=!a.published;a.publisher=a.published?'管理员':'';a.publishedAt=a.published?timeNow():'';renderMain();toast(a.published?'资产已上架':'资产已下架')}if(b.dataset.act==='delete')showSecondary('删除资产',`<p class="notice">确定删除当前目录中的“${esc(a.name)}”吗？</p>` ,`<button class="btn" data-secondary="cancel">取消</button><button class="btn primary" data-secondary="delete" data-id="${a.id}">确定删除</button>`)});
+$('originalAdd').addEventListener('click',showOriginalAdd);$('goBack').addEventListener('click',showCatalog);$('catalogSearch').addEventListener('input',renderCatalog);$('catalogRows').addEventListener('click',e=>{
+ const button=e.target.closest('[data-catalog-action]');if(!button||button.disabled)return;
+ if(button.dataset.catalogAction==='interfaces'){openDirectoryInterfaces();return;}
+ const id=button.dataset.id,action=button.dataset.catalogAction;
+ if(action==='configure'&&id==='assets')enterAssets();
+ if(action==='publish')openMetaConfig(null,{fromCatalog:true});
+ if(action==='toggle')showCatalogToggle(id);
+ if(action==='edit')showCatalogEdit(id);
+ if(action==='delete')showCatalogDelete(id);
+});
+$('secondaryFoot').addEventListener('click',e=>{
+ const button=e.target.closest('[data-secondary]');if(!button)return;
+ const action=button.dataset.secondary,id=button.dataset.id;
+ if(action==='catalog-save')saveCatalogEdit(id);
+ if(action==='catalog-toggle'){const record=catalogs.find(r=>r.id===id);if(!record)return;record.enabled=!record.enabled;hideSecondary();renderCatalog();toast(record.enabled?'目录已启用':'目录已禁用');}
+ if(action==='catalog-delete'){catalogs=catalogs.filter(r=>r.id!==id);hideSecondary();renderCatalog();toast('目录已删除');}
+});
+$('resetDemo').addEventListener('click',()=>{resetData();currentNode='infra';mainPage=1;mainSize=10;highlighted.clear();$('assetSearch').value='';resetMetadata();showCatalog();toast('演示已重置')});
+document.addEventListener('keydown',e=>{if(!$('metaOverlay').hidden||!$('metaDetailOverlay').hidden||!$('directoryInterfacesOverlay').hidden)return;if(e.key==='Escape'){if(!$('secondaryOverlay').hidden)hideSecondary();else if(!$('sourcePopover').hidden){setSourceOpen(false);$('sourceTrigger').focus()}else if(!$('copyOverlay').hidden)hideCopy()}if(e.key==='Tab'){const container=!$('secondaryOverlay').hidden?$('secondaryOverlay'):!$('copyOverlay').hidden?$('copyOverlay'):null;if(!container)return;const items=[...container.querySelectorAll('button,input,select,[tabindex="0"]')].filter(x=>!x.disabled&&x.getClientRects().length);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+
+// All interface records and network addresses below are demonstration data.
+let interfaces=[],serviceCounter=0,metaDraft=null,detailContext=null,metaReturn=null,detailReturn=null;
+let currentView='directory',directoryInterfaceContext=null,directoryInterfaceReturn=null;
+const systemSidebar=document.querySelector('.side').innerHTML;
+const statusTag=x=>`<span class="meta-status ${x?'':'off'}">${x?'启用':'停用'}</span>`;
+const endpoint=s=>`https://metadata.example.com/api/catalogs/${s.id}/assets`;
+function renderMetadataDirectory(){
+ if(!node(currentNode))return;
+ $('metaCurrentName').textContent=node(currentNode).name;
+ $('metaCurrentPath').textContent=path(currentNode);
+ const services=interfacesForDirectory(currentNode);
+ $('viewDirectoryInterfaces').textContent=`接口配置（${services.length}）`;
+}
+function interfacesForDirectory(id=null){
+ if(!id)return interfaces;
+ const scope=new Set(descendants(id));
+ return interfaces.filter(s=>[...metaDirectorySet(s)].some(nodeId=>scope.has(nodeId)));
+}
+function openDirectoryInterfaces(id=null){
+ directoryInterfaceReturn=document.activeElement;
+ directoryInterfaceContext={directoryId:id};
+ renderDirectoryInterfaces();$('directoryInterfacesOverlay').hidden=false;restoreScroll();$('closeDirectoryInterfaces').focus();
+}
+function closeDirectoryInterfaces(){
+ $('directoryInterfacesOverlay').hidden=true;directoryInterfaceContext=null;restoreScroll();directoryInterfaceReturn?.focus();
+}
+function renderDirectoryInterfaces(){
+ if(!directoryInterfaceContext)return;
+ const id=directoryInterfaceContext.directoryId,list=interfacesForDirectory(id);
+ $('directoryInterfacesScope').textContent=id?path(id):assetCatalogName();
+ $('directoryInterfacesHint').textContent=id?'当前目录及下级目录涉及的接口':'当前目录体系已发布的元数据接口';
+ $('directoryInterfacesCount').textContent=`共 ${list.length} 个接口`;
+ $('newDirectoryInterface').disabled=!getAssetCatalog()?.enabled;
+ $('directoryInterfacesTable').innerHTML=list.length?`<table><thead><tr><th>接口名称 / 地址</th><th>关联目录</th><th>访问白名单</th><th>状态</th><th>操作</th></tr></thead><tbody>${list.map(s=>`<tr data-interface-id="${s.id}"><td><strong class="interface-record-name">${esc(s.name)}</strong><code class="interface-record-endpoint">${esc(endpoint(s))}</code></td><td><div class="service-dir service-multi-dir">${directoryPathsHtml(s)}</div></td><td class="whitelist-summary">${s.whitelist.map(x=>`<span>${esc(x.address)}</span>`).join('')}</td><td>${statusTag(s.enabled)}</td><td><div class="ops"><button class="link" data-interface-action="edit" data-id="${s.id}">配置</button><button class="link" data-interface-action="example" data-id="${s.id}">调用示例</button><button class="link ${s.enabled?'danger':''}" data-interface-action="toggle" data-id="${s.id}">${s.enabled?'停用':'启用'}</button></div></td></tr>`).join('')}</tbody></table>`:empty('暂无关联接口','点击“发布新接口”选择目录并设置访问白名单。');
+}
+function refreshInterfaceViews(){renderMetadataDirectory();renderCatalog();renderServices();renderDirectoryInterfaces();}
+function directoryIds(s){return [...new Set(s.directoryIds||[])].filter(id=>node(id));}
+function metaDirectorySet(s){return new Set(directoryIds(s).flatMap(id=>descendants(id)));}
+function directoryPaths(s){return directoryIds(s).map(id=>path(id));}
+function directoryPathsHtml(s){return directoryPaths(s).map(value=>`<div class="meta-directory-path" title="${esc(value)}">${esc(value)}</div>`).join('');}
+function directorySearchText(s){return s.name+' '+[...metaDirectorySet(s)].map(id=>path(id)).join(' ');}
+function defaultMetaName(s){const ids=directoryIds(s);return !ids.length?'':ids.length===1?node(ids[0]).name+'元数据接口':'多目录元数据接口';}
+function selectionAfterToggle(currentIds,id,checked){
+ const selected=metaDirectorySet({directoryIds:currentIds});
+ for(const child of descendants(id)){if(checked)selected.add(child);else selected.delete(child);}
+ let parent=node(id)?.parent;
+ while(parent){
+  const children=nodes.filter(n=>n.parent===parent);
+  if(children.every(n=>descendants(n.id).every(child=>selected.has(child))))selected.add(parent);else selected.delete(parent);
+  parent=node(parent)?.parent;
+ }
+ return nodes.filter(n=>selected.has(n.id)&&!selected.has(n.parent)).map(n=>n.id);
+}
+function metaScope(s,onlyPublished=true){
+ const ids=metaDirectorySet(s);
+ return assets.filter(a=>ids.has(a.directoryId)&&(!onlyPublished||a.published));
+}
+function metadataFor(a){
+ const n=Number(a.originId.replace(/\D/g,''))||1;
+ const isFile=['satellite','interpret'].includes(node(a.directoryId)?.id)||a.table.includes('satellite')||a.table.includes('interpret');
+ let access;
+ if(isFile)access={mode:'file',url:`https://files.example.com/agriculture/${a.table}.tif`,format:'GeoTIFF'};
+ else if(a.apis>0&&n%3===2)access={mode:'api',method:'GET',url:`https://data.example.com/api/v1/${a.table}`,parameters:{page:1,page_size:20}};
+ else access={mode:'database',engine:'PostgreSQL',host:'db.example.com',port:5432,database:'agriculture',schema:'public',table:a.table};
+ return {id:a.id,name:a.name,description:a.description,directory_id:a.directoryId,directory_path:path(a.directoryId),type:isFile?'文件':'数据表',source:isFile?'农业遥感资料库':a.source,updated_at:a.publishedAt||a.createdAt,access};
+}
+const accessName=mode=>({database:'数据库直连',file:'文件地址',api:'数据服务'})[mode];
+function openMetaConfig(id=null,options={}){
+ if(!id&&!getAssetCatalog()){toast('当前资产目录已删除，请重置演示后继续。',true);return;}
+ if(!id&&!getAssetCatalog().enabled){toast('请先启用资产目录',true);return;}
+ const existing=interfaces.find(s=>s.id===id);
+ metaReturn=document.activeElement;
+ const initialDirectory=options.fromCatalog?'':(options.directoryId||currentNode);
+ metaDraft=existing?{...existing,directoryIds:[...existing.directoryIds],whitelist:existing.whitelist.map(x=>({...x}))}:{id:null,name:initialDirectory?node(initialDirectory).name+'元数据接口':'',directoryIds:initialDirectory?[initialDirectory]:[],whitelist:[]};
+ $('metaTitle').textContent=existing?'配置元数据接口':'发布元数据接口';
+ $('metaEditAddress').hidden=!existing;$('metaEditEndpoint').textContent=existing?endpoint(existing):'';
+ $('saveMeta').textContent=existing?'保存修改':'发布接口';
+ $('metaName').value=metaDraft.name;
+ initDirectoryPicker();
+ $('metaWhitelistAddress').value='';$('metaWhitelistAddress').removeAttribute('aria-invalid');renderWhitelist();
+ $('metaNameError').textContent='';$('metaDirectoryError').textContent='';$('metaDirectoryTrigger').removeAttribute('aria-invalid');$('metaWhitelistError').textContent='';$('metaScopeSearch').value='';
+ $('metaOverlay').hidden=false;document.body.style.overflow='hidden';
+ renderMetaScope();(options.fromCatalog?$('metaDirectoryTrigger'):$('metaName')).focus();
+}
+function closeMetaConfig(){
+ setDirectoryPickerOpen(false);$('metaOverlay').hidden=true;metaDraft=null;restoreScroll();metaReturn?.focus();
+}
+function syncMetaDraft(){
+ if(!metaDraft)return;
+ metaDraft.name=$('metaName').value.trim();
+}
+function renderMetaScope(){
+ if(!metaDraft)return;
+ syncMetaDraft();
+ if(!directoryIds(metaDraft).length){$('metaScopeCount').textContent='';$('metaPreviewTable').innerHTML=empty('请选择关联目录','选择目录后，可预览该范围内已上架资产的元数据。');return;}
+ const all=metaScope(metaDraft,false),published=metaScope(metaDraft),q=$('metaScopeSearch').value.trim();
+ const list=published.filter(a=>matches(a,q));
+ $('metaScopeCount').innerHTML=`<b>${published.length}</b> 项可发布${all.length-published.length?` · ${all.length-published.length} 项未上架不返回`:''}`;
+ $('metaPreviewTable').innerHTML=list.length?`<table><thead><tr><th>资产名称</th><th>所属目录</th><th>数据类型</th><th>访问方式</th><th>操作</th></tr></thead><tbody>${list.map(a=>{const m=metadataFor(a);return `<tr><td title="${esc(a.name)}">${esc(a.name)}</td><td>${esc(node(a.directoryId)?.name)}</td><td>${m.type}</td><td><span class="meta-mini-tag">${accessName(m.access.mode)}</span></td><td><button class="link" data-meta-preview="${a.id}">预览元数据</button></td></tr>`}).join('')}</tbody></table>`:empty(q?'没有匹配的资产':'当前范围内暂无已上架资产',q?'请调整搜索关键词':'接口发布后，资产上架即可通过接口返回。');
+}
+function saveMetaConfig(){
+ if($('metaWhitelistAddress').value.trim()&&!addWhitelistFromInput())return;
+ syncMetaDraft();
+ let valid=true;
+ const duplicate=interfaces.some(s=>s.id!==metaDraft.id&&s.name===metaDraft.name);
+ $('metaNameError').textContent=!metaDraft.name?'请输入接口名称':duplicate?'已存在同名接口，请调整名称':'';
+ if(!metaDraft.name||duplicate)valid=false;
+ const hasDirectory=directoryIds(metaDraft).length>0;
+ $('metaDirectoryError').textContent=hasDirectory?'':'请至少选择一个关联目录';
+ if(!hasDirectory){valid=false;$('metaDirectoryTrigger').setAttribute('aria-invalid','true');}
+ $('metaWhitelistError').textContent=metaDraft.whitelist.length?'':'请至少添加一个白名单地址';
+ if(!metaDraft.whitelist.length)valid=false;
+ if(!valid){(!hasDirectory?$('metaDirectoryTrigger'):!metaDraft.name||duplicate?$('metaName'):$('metaWhitelistAddress')).focus();return;}
+ const isNew=!metaDraft.id;
+ let record;
+ if(isNew){record={...metaDraft,id:'meta-'+String(++serviceCounter).padStart(3,'0'),enabled:true,createdAt:timeNow()};interfaces.unshift(record);}
+ else{record=interfaces.find(x=>x.id===metaDraft.id);Object.assign(record,{...metaDraft});}
+ closeMetaConfig();refreshInterfaceViews();
+ if(isNew)openMetaDetail(record.id,{success:true});
+ else{toast('接口配置已更新，接口地址保持不变');}
+}
+function restoreScroll(){document.body.style.overflow=[...document.querySelectorAll('.overlay')].some(x=>!x.hidden)?'hidden':'';}
+function setMainView(mode){
+ currentView=mode;
+ $('navApplications').classList.toggle('active',mode==='service');$('navSystem').classList.toggle('active',mode!=='service');
+ $('serviceView').hidden=mode!=='service';$('workspace').hidden=mode==='service';$('directoryList').hidden=true;
+ $('goBack').style.visibility=mode==='service'?'hidden':'visible';$('pageTitle').textContent=mode==='service'?'API服务':assetCatalogName();
+ document.querySelector('.side').innerHTML=mode==='service'?`<div class="side-item">${icon('grid')}指标中心${icon('down','chev')}</div><div class="side-item sub">指标定义</div><div class="side-item">${icon('db')}数据管理</div><div class="side-item">${icon('search')}自助取数</div><button class="side-item service-active" id="sideApiService">${icon('share')}API服务</button><div class="side-item">${icon('settings')}运维中心</div>`:systemSidebar;
+ if(mode==='service'){renderServices();$('sideApiService').addEventListener('click',()=>{$('serviceSearch').value='';$('serviceStatus').value='';renderServices()});}
+ else if(getAssetCatalog())renderMain();else showCatalog();
+}
+function showServices(directoryId=null){
+ $('serviceSearch').value=directoryId?path(directoryId):'';$('serviceStatus').value='';setMainView('service');
+}
+function renderServices(){
+ const q=$('serviceSearch').value.trim().toLowerCase(),status=$('serviceStatus').value;
+ const list=interfaces.filter(s=>(!q||directorySearchText(s).toLowerCase().includes(q))&&(!status||(status==='enabled')===s.enabled));
+ $('serviceCount').textContent=`共 ${list.length} 个接口`;
+ $('serviceTable').innerHTML=list.length?`<table class="service-table"><thead><tr><th>接口名称</th><th>关联目录</th><th>访问白名单</th><th>发布资产数</th><th>状态</th><th>操作</th></tr></thead><tbody>${list.map(s=>`<tr><td><button class="link service-name" data-service="detail" data-service-id="${s.id}">${esc(s.name)}</button><span class="service-id">${s.id}</span></td><td><div class="service-dir service-multi-dir">${directoryPathsHtml(s)}</div></td><td class="whitelist-summary" title="${esc(s.whitelist.map(x=>x.address).join('、'))}">${s.whitelist.slice(0,2).map(x=>`<span>${esc(x.address)}</span>`).join('')}${s.whitelist.length>2?`<small>共 ${s.whitelist.length} 个地址</small>`:''}</td><td><span class="mini-count">${metaScope(s).length}</span></td><td>${statusTag(s.enabled)}</td><td><div class="ops"><button class="link" data-service="detail" data-service-id="${s.id}">调用示例</button><button class="link" data-service="edit" data-service-id="${s.id}">配置</button><button class="link ${s.enabled?'danger':''}" data-service="toggle" data-service-id="${s.id}">${s.enabled?'停用':'启用'}</button></div></td></tr>`).join('')}</tbody></table>`:`<div class="empty service-empty">${icon('share')}<strong>${interfaces.length?'没有符合条件的接口':'暂无目录元数据接口'}</strong><p>${interfaces.length?'请调整关键词或状态筛选':'关联一个或多个目录，将其中已上架资产的元数据提供给白名单内的访问来源。'}</p><button class="btn ${interfaces.length?'':'primary'}" id="serviceEmptyAction">${interfaces.length?'清空筛选':'新建元数据接口'}</button></div>`;
+ const emptyAction=$('serviceEmptyAction');if(emptyAction)emptyAction.onclick=()=>{if(interfaces.length){$('serviceSearch').value='';$('serviceStatus').value='';renderServices();}else openMetaConfig();};
+}
+function toggleService(id){
+ const s=interfaces.find(x=>x.id===id);if(!s)return;
+ if(!s.enabled){s.enabled=true;refreshInterfaceViews();toast('接口已启用');return;}
+ showSecondary('停用元数据接口',`<p class="notice">确定停用“${esc(s.name)}”吗？</p><p class="demo-support">停用后，该接口停止提供元数据查询。已获取的数据连接权限不受此操作影响。</p>`,`<button class="btn" data-secondary="cancel">取消</button><button class="btn primary" id="confirmDisableMeta">确定停用</button>`);
+ $('confirmDisableMeta').onclick=()=>{s.enabled=false;hideSecondary();restoreScroll();refreshInterfaceViews();toast('接口已停用');};
+}
+function openMetaDetail(id,options={}){
+ const service=options.draft?{...metaDraft,directoryIds:[...metaDraft.directoryIds],id:'未发布',enabled:true,whitelist:metaDraft.whitelist.map(x=>({...x}))}:interfaces.find(s=>s.id===id);
+ if(!service)return;
+ detailReturn=document.activeElement;
+ detailContext={service,draft:!!options.draft,assetId:options.assetId||metaScope(service)[0]?.id,response:null,sourceIp:sampleAllowedIp(service),success:!!options.success};
+ $('metaDetailTitle').textContent=options.draft?'元数据卡片预览':service.name;
+ $('metaDetailStatus').innerHTML=options.draft?'':statusTag(service.enabled);
+ $('metaDetailFootNote').textContent=options.draft?'预览内容与接口返回的元数据保持一致。':'演示地址与白名单配置用于原型体验。';
+ $('finishMetaDetail').textContent=options.draft?'返回配置':'完成';
+ $('metaDetailOverlay').hidden=false;document.body.style.overflow='hidden';renderMetaDetail();$('closeMetaDetail').focus();
+}
+function closeMetaDetail(){
+ $('metaDetailOverlay').hidden=true;detailContext=null;restoreScroll();detailReturn?.focus();
+}
+function renderMetaDetail(){
+ if(!detailContext)return;
+ const d=detailContext,s=d.service,list=metaScope(s);
+ if(!list.some(a=>a.id===d.assetId))d.assetId=list[0]?.id;
+ if(d.draft){$('metaDetailBody').innerHTML=`<p class="meta-draft-hint">${esc(directoryPaths(s).join('；'))} · ${list.length} 项已上架资产</p>${renderMetadataCard(assets.find(a=>a.id===d.assetId))}`;bindDetailActions();return;}
+ $('metaDetailBody').innerHTML=`${d.success?`<div class="meta-success">${icon('check')}元数据接口已发布<small>当前包含 ${list.length} 项已上架资产</small></div>`:''}${!s.enabled?'<div class="meta-status-banner">接口已停用，调用将被拒绝。下方为已保存的接口配置与调用示例。</div>':''}<dl class="meta-detail-summary"><div><dt>关联目录</dt><dd class="meta-detail-directories">${directoryPathsHtml(s)}</dd></div><div><dt>访问白名单</dt><dd class="whitelist-summary">${s.whitelist.map(x=>`<span>${esc(x.address)}</span>`).join('')}</dd></div><div><dt>目录范围</dt><dd>${directoryIds(s).length} 个</dd></div></dl><div class="meta-endpoint"><span class="meta-method">GET</span><code title="${esc(endpoint(s))}">${esc(endpoint(s))}</code><span class="demo-address">演示地址</span><button class="link" id="copyMetaEndpoint">复制地址</button></div><div class="meta-example-title"><h3>调用示例</h3><small>返回元数据与访问位置</small></div><div id="metaDetailContent">${renderRequestPanel()}</div>`;
+ bindDetailActions();
+}
+function renderMetadataCard(a){
+ if(!a)return empty('暂无可预览的元数据');
+ const m=metadataFor(a),v=m.access;
+ const fields=v.mode==='database'?[['数据库类型',v.engine],['主机 / 端口',v.host+' : '+v.port],['数据库',v.database],['Schema',v.schema],['数据表',v.table]]:v.mode==='file'?[['文件地址',v.url],['文件格式',v.format]]:[['请求方式',v.method],['服务地址',v.url],['请求参数','page=1，page_size=20']];
+ return `<article class="meta-card"><div class="meta-card-title"><span class="meta-card-icon">${icon(v.mode==='file'?'folder':'db')}</span><h3>${esc(m.name)}</h3><small>元数据卡片</small></div><div class="meta-card-path">${esc(m.directory_path)}</div><p class="meta-card-description">${esc(m.description)}</p><dl class="meta-card-info"><dt>资产标识</dt><dd>${esc(m.id)}</dd><dt>数据类型</dt><dd>${m.type}</dd><dt>数据来源</dt><dd>${esc(m.source)}</dd><dt>更新时间</dt><dd>${esc(m.updated_at)}</dd></dl><section class="meta-access-box"><div class="meta-access-top">数据访问<span class="meta-mini-tag">${accessName(v.mode)}</span><button class="link" id="copyAccessInfo" data-access-asset="${a.id}">复制访问信息</button></div><dl class="meta-access-fields">${fields.map(([k,val])=>`<dt>${k}</dt><dd>${esc(val)}</dd>`).join('')}</dl><p class="meta-access-note">使用已获授权的数据访问账号或凭证连接；元数据不包含账号密码。</p></section></article>`;
+}
+function renderRequestPanel(){
+ const d=detailContext,s=d.service;
+ return `<div class="meta-api-layout"><section class="meta-request-panel"><h3>模拟接口调用</h3><div class="form-field"><label for="requestSourceIp">请求来源 IP</label><input class="input" id="requestSourceIp" value="${esc(d.sourceIp)}" placeholder="输入来源 IP，例如 10.20.1.10" autocomplete="off" spellcheck="false"><div class="request-source-quick"><button class="link" id="sampleAllowedIp">白名单内示例</button><button class="link" id="sampleBlockedIp">白名单外示例</button></div><div class="error" id="requestSourceError"></div><div class="source-caption">此输入仅用于模拟；真实请求来源由服务端识别。</div></div><div class="meta-request-page"><div class="form-field"><label for="requestPage">page · 页码</label><input class="input" id="requestPage" type="number" min="1" max="9999" step="1" value="1"></div><div class="form-field"><label for="requestPageSize">page_size · 每页条数</label><select class="input" id="requestPageSize"><option value="5">5</option><option value="10">10</option><option value="20">20</option></select></div></div><div class="form-field"><label for="requestKeyword">keyword · 资产关键词</label><input class="input" id="requestKeyword" placeholder="选填"></div><div class="meta-request-code" id="requestCode"></div><button class="btn primary" id="simulateRequest">模拟调用</button><p class="meta-request-note">模拟校验接口状态与访问白名单，不发送网络请求。</p></section><section class="meta-response"><div class="meta-response-head">响应结果<span class="http-code" id="responseCode"></span><button class="link" id="copyResponse" disabled>复制 JSON</button></div><div class="meta-response-empty" id="responseEmpty">点击“模拟调用”查看返回结果</div><pre id="responseJson" hidden></pre></section></div>`;
+}
+function updateRequestCode(){
+ if(!detailContext||!$('requestCode'))return;
+ const s=detailContext.service,page=$('requestPage').value||1,size=$('requestPageSize').value,kw=$('requestKeyword').value.trim();
+ const query=`page=${page}&page_size=${size}${kw?'&keyword='+encodeURIComponent(kw):''}`;
+ $('requestCode').textContent=`GET /api/catalogs/${s.id}/assets?${query}`;
+}
+function simulateMetaRequest(){
+ const d=detailContext,s=d.service;
+ if(!$('requestPage').checkValidity()){$('requestPage').reportValidity();return;}
+ d.sourceIp=$('requestSourceIp').value.trim();
+ const sourceIp=parseIp(d.sourceIp);
+ $('requestSourceError').textContent=sourceIp?'':'请输入有效的来源 IP，不包含网段或端口';
+ if(!sourceIp){clearRequestResponse();$('requestSourceIp').focus();return;}
+ const page=Number($('requestPage').value)||1,size=Number($('requestPageSize').value),q=$('requestKeyword').value.trim();
+ let code,body;
+ if(!s.enabled){code=503;body={code:'INTERFACE_DISABLED',message:'该元数据接口已停用'};}
+ else if(!isIpAllowed(d.sourceIp,s.whitelist)){code=403;body={code:'IP_NOT_ALLOWED',message:'请求来源 IP 不在接口访问白名单内'};}
+ else{
+  const list=metaScope(s).filter(a=>matches(a,q));
+  code=200;body={code:'OK',directories:directoryIds(s).map(id=>({id,name:node(id).name,path:path(id),include_children:true})),page,page_size:size,total:list.length,items:list.slice((page-1)*size,page*size).map(metadataFor)};
+ }
+ d.response=JSON.stringify(body,null,2);$('responseCode').textContent=`HTTP ${code}`;$('responseCode').classList.toggle('error-code',code!==200);$('responseEmpty').hidden=true;$('responseJson').hidden=false;$('responseJson').textContent=d.response;$('responseJson').scrollTop=0;$('copyResponse').disabled=false;
+}
+async function copyPlainText(value,message){
+ let ok=false;
+ try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(value);ok=true;}}catch(e){}
+ if(!ok){const textarea=document.createElement('textarea');textarea.value=value;textarea.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(textarea);textarea.select();try{ok=document.execCommand('copy');}catch(e){}textarea.remove();}
+ toast(ok?message:'浏览器未允许复制，请手动选择内容复制',!ok);
+}
+function bindDetailActions(){
+ const accessButton=$('copyAccessInfo');if(accessButton)accessButton.onclick=()=>{const a=assets.find(x=>x.id===accessButton.dataset.accessAsset);copyPlainText(JSON.stringify(metadataFor(a).access,null,2),'访问信息已复制');};
+ if(detailContext.draft)return;
+ $('copyMetaEndpoint').onclick=()=>copyPlainText(endpoint(detailContext.service),'接口地址已复制');
+  ['requestPage','requestPageSize','requestKeyword'].forEach(id=>$(id).addEventListener('input',()=>{updateRequestCode();clearRequestResponse();}));
+  $('requestSourceIp').oninput=()=>{detailContext.sourceIp=$('requestSourceIp').value.trim();$('requestSourceError').textContent='';clearRequestResponse();};
+  $('sampleAllowedIp').onclick=()=>setSampleSourceIp(sampleAllowedIp(detailContext.service));
+  $('sampleBlockedIp').onclick=()=>setSampleSourceIp(sampleBlockedIp(detailContext.service));
+  $('simulateRequest').onclick=simulateMetaRequest;$('copyResponse').onclick=()=>copyPlainText(detailContext.response||'','JSON 已复制');updateRequestCode();
+}
+function resetMetadata(){
+ setDirectoryPickerOpen(false);
+ interfaces=[];serviceCounter=0;metaDraft=null;detailContext=null;directoryInterfaceContext=null;
+ $('metaOverlay').hidden=true;$('metaDetailOverlay').hidden=true;$('secondaryOverlay').hidden=true;$('directoryInterfacesOverlay').hidden=true;
+ $('serviceSearch').value='';$('serviceStatus').value='';$('catalogSearch').value='';setMainView('directory');restoreScroll();
+}
+$('openMetaPublish').onclick=()=>openMetaConfig();
+$('viewDirectoryInterfaces').onclick=()=>openDirectoryInterfaces(currentNode);
+$('closeDirectoryInterfaces').onclick=closeDirectoryInterfaces;$('finishDirectoryInterfaces').onclick=closeDirectoryInterfaces;
+$('newDirectoryInterface').onclick=()=>openMetaConfig(null,{fromCatalog:!directoryInterfaceContext.directoryId,directoryId:directoryInterfaceContext.directoryId});
+$('directoryInterfacesTable').onclick=e=>{
+ const b=e.target.closest('[data-interface-action]');if(!b)return;
+ const id=b.dataset.id;
+ if(b.dataset.interfaceAction==='edit')openMetaConfig(id);
+ if(b.dataset.interfaceAction==='example')openMetaDetail(id);
+ if(b.dataset.interfaceAction==='toggle')toggleService(id);
+};
+$('navApplications').onclick=()=>showServices();$('navSystem').onclick=()=>setMainView('directory');
+$('newMetaService').onclick=()=>openMetaConfig();$('returnCatalog').onclick=()=>setMainView('directory');
+$('closeMeta').onclick=closeMetaConfig;$('cancelMeta').onclick=closeMetaConfig;$('saveMeta').onclick=saveMetaConfig;
+$('metaDirectoryTrigger').onclick=()=>setDirectoryPickerOpen($('metaDirectoryPopover').hidden);
+$('metaDirectorySearch').oninput=renderDirectoryPicker;
+$('metaScopeSearch').oninput=renderMetaScope;
+$('metaName').oninput=()=>{$('metaNameError').textContent='';};
+$('addWhitelistAddress').onclick=addWhitelistFromInput;
+$('metaWhitelistAddress').oninput=()=>{$('metaWhitelistError').textContent='';$('metaWhitelistAddress').removeAttribute('aria-invalid');};
+$('metaWhitelistAddress').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();addWhitelistFromInput();}};
+$('metaWhitelistList').onclick=e=>{const b=e.target.closest('[data-remove-address]');if(b){metaDraft.whitelist.splice(Number(b.dataset.removeAddress),1);renderWhitelist();}};
+$('metaPreviewTable').onclick=e=>{const b=e.target.closest('[data-meta-preview]');if(b){syncMetaDraft();openMetaDetail(null,{draft:true,assetId:b.dataset.metaPreview});}};
+$('serviceSearch').oninput=renderServices;$('serviceStatus').onchange=renderServices;
+$('serviceTable').onclick=e=>{const b=e.target.closest('[data-service]');if(!b)return;const id=b.dataset.serviceId;if(b.dataset.service==='detail')openMetaDetail(id);if(b.dataset.service==='edit')openMetaConfig(id);if(b.dataset.service==='toggle')toggleService(id);};
+$('closeMetaDetail').onclick=closeMetaDetail;$('finishMetaDetail').onclick=closeMetaDetail;
+document.addEventListener('keydown',e=>{
+ if($('metaOverlay').hidden&&$('metaDetailOverlay').hidden&&$('directoryInterfacesOverlay').hidden)return;
+ if(e.key==='Escape'){e.preventDefault();if(!$('secondaryOverlay').hidden){hideSecondary();restoreScroll();}else if(!$('metaDetailOverlay').hidden)closeMetaDetail();else if(!$('metaDirectoryPopover').hidden){setDirectoryPickerOpen(false);$('metaDirectoryTrigger').focus();}else if(!$('metaOverlay').hidden)closeMetaConfig();else closeDirectoryInterfaces();return;}
+ if(e.key==='Tab'){
+  const container=!$('secondaryOverlay').hidden?$('secondaryOverlay'):!$('metaDetailOverlay').hidden?$('metaDetailOverlay'):!$('metaOverlay').hidden?$('metaOverlay'):$('directoryInterfacesOverlay');
+  const items=[...container.querySelectorAll('button,input,select,textarea,[tabindex="0"]')].filter(x=>!x.disabled&&x.getClientRects().length);
+  const first=items[0],last=items[items.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}
+ }
+});
+
+let metaTreeExpanded=new Set();
+function initDirectoryPicker(){
+ metaTreeExpanded=new Set(expanded);
+ for(const selected of directoryIds(metaDraft)){let id=selected;while(id){const n=node(id);if(n?.parent)metaTreeExpanded.add(n.parent);id=n?.parent;}}
+ $('metaDirectorySearch').value='';setDirectoryPickerOpen(false);updateDirectoryValue();
+}
+function updateDirectoryValue(){
+ const ids=directoryIds(metaDraft),paths=directoryPaths(metaDraft);
+ $('metaDirectoryValue').textContent=!ids.length?'请选择目录（可多选）':ids.length===1?paths[0]:`已选择 ${ids.length} 个目录范围`;
+ $('metaDirectoryValue').classList.toggle('placeholder',!ids.length);
+ $('metaDirectoryTrigger').title=paths.join('；')||'请选择目录（可多选）';
+ $('metaSelectedDirectoryPath').textContent=ids.length?`已选 ${ids.length} 个目录范围`:'未选择目录';
+ $('clearMetaDirectories').disabled=!ids.length;
+ $('metaDirectoryTags').innerHTML=ids.map(id=>`<span class="meta-directory-tag" title="${esc(path(id))}"><span>${esc(node(id).name)}</span><button class="icon-btn" data-remove-directory="${id}" aria-label="移除目录 ${esc(node(id).name)}">${icon('close')}</button></span>`).join('');
+}
+function setDirectoryPickerOpen(open){
+ $('metaDirectoryPopover').hidden=!open;
+ $('metaDirectoryTrigger').setAttribute('aria-expanded',String(open));
+ $('metaDirectoryTrigger').classList.toggle('open',open);
+ if(open){renderDirectoryPicker();$('metaDirectorySearch').focus();}
+}
+function renderDirectoryPicker(){
+ if(!metaDraft)return;
+ const q=$('metaDirectorySearch').value.trim().toLowerCase(),selected=metaDirectorySet(metaDraft);let html='';
+ function walk(parent,depth){
+  for(const n of nodes.filter(x=>x.parent===parent)){
+   if(q&&!path(n.id).toLowerCase().includes(q)&&!descendants(n.id).some(id=>node(id).name.toLowerCase().includes(q)))continue;
+   const child=nodes.some(x=>x.parent===n.id),open=!!q||metaTreeExpanded.has(n.id),branch=descendants(n.id),checked=branch.every(id=>selected.has(id)),partial=!checked&&branch.some(id=>selected.has(id));
+   html+=`<div class="tree-row ${checked?'selected':''} ${partial?'partly-selected':''}" role="treeitem" tabindex="0" aria-level="${depth+1}" aria-checked="${partial?'mixed':checked}" ${child?`aria-expanded="${open}"`:''} data-meta-directory="${n.id}" style="padding-left:${depth*22+4}px">${child?`<button class="meta-tree-arrow ${open?'open':''}" data-meta-expand="${n.id}" aria-label="${open?'收起':'展开'}${esc(n.name)}" tabindex="-1">${icon('right')}</button>`:'<span class="meta-tree-placeholder"></span>'}<input type="checkbox" class="meta-tree-checkbox" data-meta-check="${n.id}" aria-label="选择目录 ${esc(n.name)}" tabindex="-1" ${checked?'checked':''} data-partial="${partial}"><span class="node-label">${esc(n.name)}<span class="ncount"> (${count(n.id)})</span></span></div>`;
+   if(child&&open)walk(n.id,depth+1);
+  }
+ }
+ walk(null,0);$('metaDirectoryTree').innerHTML=html||'<div class="no-options">未找到匹配的目录</div>';
+ $('metaDirectoryTree').querySelectorAll('[data-meta-check]').forEach(input=>input.indeterminate=input.dataset.partial==='true');
+}
+function applyDirectorySelection(ids){
+ const previousDefault=defaultMetaName(metaDraft),automatic=!$('metaName').value.trim()||$('metaName').value===previousDefault;
+ metaDraft.directoryIds=ids;
+ if(automatic)$('metaName').value=defaultMetaName(metaDraft);
+ $('metaDirectoryError').textContent='';$('metaDirectoryTrigger').removeAttribute('aria-invalid');$('metaNameError').textContent='';
+ updateDirectoryValue();renderDirectoryPicker();renderMetaScope();
+}
+function toggleMetaDirectory(id,checked){
+ if(!node(id)||!metaDraft)return;
+ const scroll=$('metaDirectoryTree').scrollTop;
+ applyDirectorySelection(selectionAfterToggle(directoryIds(metaDraft),id,checked));
+ $('metaDirectoryTree').scrollTop=scroll;
+}
+$('metaDirectoryTree').onclick=e=>{
+ e.stopPropagation();
+ const toggle=e.target.closest('[data-meta-expand]');
+ if(toggle){const id=toggle.dataset.metaExpand,scroll=$('metaDirectoryTree').scrollTop;metaTreeExpanded.has(id)?metaTreeExpanded.delete(id):metaTreeExpanded.add(id);renderDirectoryPicker();$('metaDirectoryTree').scrollTop=scroll;$('metaDirectoryTree').querySelector(`[data-meta-directory="${id}"]`)?.focus();return;}
+ const row=e.target.closest('[data-meta-directory]');if(!row)return;
+ const id=row.dataset.metaDirectory,selected=metaDirectorySet(metaDraft);
+ toggleMetaDirectory(id,!descendants(id).every(child=>selected.has(child)));
+ $('metaDirectoryTree').querySelector(`[data-meta-directory="${id}"]`)?.focus();
+};
+$('metaDirectoryTree').onkeydown=e=>{
+ const row=e.target.closest('[data-meta-directory]');if(!row)return;const id=row.dataset.metaDirectory;
+ if(e.key==='Enter'||e.key===' '){e.preventDefault();const selected=metaDirectorySet(metaDraft);toggleMetaDirectory(id,!descendants(id).every(child=>selected.has(child)));$('metaDirectoryTree').querySelector(`[data-meta-directory="${id}"]`)?.focus();}
+ else if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();if(e.key==='ArrowLeft')metaTreeExpanded.delete(id);else metaTreeExpanded.add(id);renderDirectoryPicker();$('metaDirectoryTree').querySelector(`[data-meta-directory="${id}"]`)?.focus();}
+ else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const rows=[...$('metaDirectoryTree').querySelectorAll('[data-meta-directory]')],index=rows.indexOf(row);rows[Math.max(0,Math.min(rows.length-1,index+(e.key==='ArrowDown'?1:-1)))]?.focus();}
+};
+$('clearMetaDirectories').onclick=()=>{applyDirectorySelection([]);$('metaDirectorySearch').focus();};
+$('finishDirectoryPicker').onclick=()=>{setDirectoryPickerOpen(false);$('metaDirectoryTrigger').focus();};
+$('metaDirectoryTags').onclick=e=>{const button=e.target.closest('[data-remove-directory]');if(button){e.stopPropagation();toggleMetaDirectory(button.dataset.removeDirectory,false);$('metaDirectoryTrigger').focus();}};
+document.addEventListener('click',e=>{if(!$('metaDirectoryPopover').hidden&&!e.target.closest('#metaTreeSelect'))setDirectoryPickerOpen(false);});
+
+// Pure address helpers: used only for local prototype validation and matching.
+function formatIp(value,family){
+ if(family===4)return [24n,16n,8n,0n].map(shift=>String((value>>shift)&255n)).join('.');
+ const groups=[];for(let i=7;i>=0;i--)groups.push(Number((value>>BigInt(i*16))&65535n).toString(16));
+ let best=-1,length=0;for(let i=0;i<8;){if(groups[i]!=='0'){i++;continue;}let j=i;while(j<8&&groups[j]==='0')j++;if(j-i>length){best=i;length=j-i;}i=j;}
+ if(length<2)return groups.join(':');
+ return groups.slice(0,best).join(':')+'::'+groups.slice(best+length).join(':');
+}
+function parseIp(raw){
+ const text=String(raw).trim();
+ if(/^\d+\.\d+\.\d+\.\d+$/.test(text)){
+  const parts=text.split('.');if(parts.some(x=>!/^\d{1,3}$/.test(x)||Number(x)>255||(x.length>1&&x.startsWith('0'))))return null;
+  const value=parts.reduce((v,x)=>(v<<8n)+BigInt(x),0n);return {family:4,bits:32,value,text:formatIp(value,4)};
+ }
+ if(!text.includes(':')||/[\s%\[\]\/]/.test(text))return null;
+ let ip=text.toLowerCase();
+ if(ip.includes('.')){const lastColon=ip.lastIndexOf(':'),tail=parseIp(ip.slice(lastColon+1));if(!tail||tail.family!==4)return null;ip=ip.slice(0,lastColon+1)+((tail.value>>16n)&65535n).toString(16)+':'+(tail.value&65535n).toString(16);}
+ const halves=ip.split('::');if(halves.length>2)return null;
+ const left=halves[0]?halves[0].split(':'):[],right=halves.length===2&&halves[1]?halves[1].split(':'):[];
+ if([...left,...right].some(x=>!(/^[0-9a-f]{1,4}$/).test(x)))return null;
+ if(halves.length===1&&left.length!==8)return null;
+ if(halves.length===2&&left.length+right.length>=8)return null;
+ const groups=halves.length===1?left:[...left,...Array(8-left.length-right.length).fill('0'),...right];
+ const value=groups.reduce((v,x)=>(v<<16n)+BigInt('0x'+x),0n);
+ return {family:6,bits:128,value,text:formatIp(value,6)};
+}
+function parseAddressRule(raw){
+ const parts=String(raw).trim().split('/');if(parts.length>2)return null;
+ const ip=parseIp(parts[0]);if(!ip)return null;
+ if(parts.length===2&&!/^\d{1,3}$/.test(parts[1]))return null;
+ const prefix=parts.length===2?Number(parts[1]):ip.bits;if(prefix<0||prefix>ip.bits)return null;
+ const shift=BigInt(ip.bits-prefix),network=(ip.value>>shift)<<shift;
+ return {...ip,prefix,network,isCidr:prefix<ip.bits,address:formatIp(network,ip.family)+(prefix<ip.bits?'/'+prefix:''),key:ip.family+':'+prefix+':'+network.toString(16)};
+}
+function isIpAllowed(source,whitelist){
+ const ip=parseIp(source);if(!ip)return false;
+ return whitelist.some(entry=>{const rule=parseAddressRule(entry.address);if(!rule||rule.family!==ip.family)return false;const shift=BigInt(ip.bits-rule.prefix);return (ip.value>>shift)===(rule.network>>shift);});
+}
+function sampleAllowedIp(service){
+ const rule=parseAddressRule(service.whitelist[0]?.address||'');if(!rule)return '';
+ return formatIp(rule.network+(rule.prefix<rule.bits?1n:0n),rule.family);
+}
+function sampleBlockedIp(service){
+ return ['203.0.113.99','198.51.100.8','192.0.2.9','10.99.99.9','2001:db8:ffff::99','fdff::99'].find(ip=>!isIpAllowed(ip,service.whitelist))||null;
+}
+function setSampleSourceIp(ip){
+ if(!ip){toast('当前白名单已覆盖全部示例地址，请手动填写来源 IP',true);return;}
+ $('requestSourceIp').value=ip;detailContext.sourceIp=ip;$('requestSourceError').textContent='';clearRequestResponse();
+}
+function clearRequestResponse(){
+ if(!$('responseJson'))return;
+ detailContext.response=null;$('responseJson').hidden=true;$('responseJson').textContent='';$('responseCode').textContent='';$('responseEmpty').hidden=false;$('copyResponse').disabled=true;
+}
+function renderWhitelist(){
+ if(!metaDraft)return;
+ $('metaWhitelistList').innerHTML=metaDraft.whitelist.length?metaDraft.whitelist.map((entry,i)=>{const rule=parseAddressRule(entry.address);return `<div class="whitelist-entry"><div class="whitelist-address">${esc(entry.address)}</div><span class="meta-mini-tag">${rule?.isCidr?'IP 网段':'单个 IP'}</span><button class="icon-btn" data-remove-address="${i}" aria-label="移除 ${esc(entry.address)}">${icon('close')}</button></div>`;}).join(''):'<div class="whitelist-empty">尚未添加访问地址</div>';
+}
+function appendWhitelist(addresses){
+ let added=0;
+ for(const raw of addresses){const rule=parseAddressRule(raw);if(!rule)continue;if(metaDraft.whitelist.some(x=>parseAddressRule(x.address)?.key===rule.key))continue;metaDraft.whitelist.push({address:rule.address});added++;}
+ renderWhitelist();$('metaWhitelistError').textContent='';$('metaWhitelistAddress').removeAttribute('aria-invalid');return added;
+}
+function addWhitelistFromInput(){
+ const text=$('metaWhitelistAddress').value.trim();
+ if(!text){$('metaWhitelistError').textContent='请输入 IP 地址或网段';$('metaWhitelistAddress').setAttribute('aria-invalid','true');return false;}
+ const addresses=text.split(/[\s,，;；]+/).filter(Boolean),invalid=addresses.find(x=>!parseAddressRule(x));
+ if(invalid){$('metaWhitelistError').textContent=`“${invalid}”不是有效的 IP 地址或网段，请检查后重新输入。`;$('metaWhitelistAddress').setAttribute('aria-invalid','true');return false;}
+ const added=appendWhitelist(addresses);$('metaWhitelistAddress').value='';toast(added?`已添加 ${added} 个白名单地址`:'地址已存在，未重复添加',!added);return true;
+}
+
+resetData();renderMain();showCatalog();
+})();
+</script>
+</body></html>

@@ -6,7 +6,7 @@
 把仓库里的业务原型与业务截图组装成可直接托管的静态站点：
 
     _site/
-      index.html              原型首页（目录配置 · 资产复制交互原型）
+      index.html              原型首页（自动取自「配置管理目录功能优化/」下最新的 .html）
       screenshots/
         index.html            业务截图画廊
         *.png                 业务截图原图
@@ -28,10 +28,32 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# 原型源文件 -> 站点首页
-PROTOTYPE_SRC = REPO_ROOT / "配置管理目录功能优化" / "目录配置-资产复制交互原型.html"
+# 原型目录：自动发现其中的 HTML 作为站点首页（换原型 / 改文件名都不必动脚本）
+PROTOTYPE_DIR = REPO_ROOT / "配置管理目录功能优化"
 # 业务截图目录
 SCREENSHOT_SRC = REPO_ROOT / "平台业务截图"
+
+
+def find_prototype() -> Path | None:
+    """在原型目录中定位首页 HTML。存在多个时取最近修改的一个。"""
+    if not PROTOTYPE_DIR.is_dir():
+        return None
+    candidates = sorted(
+        (
+            p
+            for p in PROTOTYPE_DIR.iterdir()
+            if p.is_file() and p.suffix.lower() in {".html", ".htm"}
+        ),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    if not candidates:
+        return None
+    if len(candidates) > 1:
+        print(f"[提示] 原型目录内有 {len(candidates)} 个 HTML，取最近修改的：{candidates[0].name}")
+        for extra in candidates[1:]:
+            print(f"       已忽略：{extra.name}")
+    return candidates[0]
 
 # 画廊页配色，与原型主色（#1877f2）保持一致
 PAGE_BG = "#f2f6fb"
@@ -64,6 +86,12 @@ def inject_favicon(html_text: str) -> str:
         return html_text
     at = idx + len("<head>")
     return html_text[:at] + "\n" + FAVICON + html_text[at:]
+
+
+def write_lf(path: Path, text: str) -> None:
+    """统一以 LF 写出，避免 Windows 下生成 CRLF 造成的 diff 噪声。"""
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(text)
 
 
 def build_gallery(titles: list[tuple[str, str]]) -> str:
@@ -138,13 +166,14 @@ def main() -> int:
     shots_dir = out_dir / "screenshots"
 
     # ---- 1. 原型首页 ----
-    if not PROTOTYPE_SRC.is_file():
-        print(f"[错误] 找不到原型源文件：{PROTOTYPE_SRC}", file=sys.stderr)
+    prototype_src = find_prototype()
+    if prototype_src is None:
+        print(f"[错误] 在 {PROTOTYPE_DIR} 下找不到任何 .html 原型文件", file=sys.stderr)
         return 1
     out_dir.mkdir(parents=True, exist_ok=True)
-    prototype_html = inject_favicon(PROTOTYPE_SRC.read_text(encoding="utf-8"))
-    (out_dir / "index.html").write_text(prototype_html, encoding="utf-8")
-    print(f"[完成] 原型首页  -> {out_dir / 'index.html'}")
+    prototype_html = inject_favicon(prototype_src.read_text(encoding="utf-8"))
+    write_lf(out_dir / "index.html", prototype_html)
+    print(f"[完成] 原型首页  -> {out_dir / 'index.html'}（源：{prototype_src.name}）")
 
     # ---- 2. 业务截图 ----
     if not SCREENSHOT_SRC.is_dir():
@@ -160,7 +189,7 @@ def main() -> int:
         titles.append((src.name, src.stem.replace("_", " ")))
 
     if titles:
-        (shots_dir / "index.html").write_text(build_gallery(titles), encoding="utf-8")
+        write_lf(shots_dir / "index.html", build_gallery(titles))
         print(f"[完成] 业务截图  -> {shots_dir}（{len(titles)} 张）")
 
     print(f"\n站点已组装完毕：{out_dir}")
